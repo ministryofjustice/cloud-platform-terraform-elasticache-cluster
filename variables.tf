@@ -1,5 +1,22 @@
 variable "team_name" {}
 
+variable "business-unit" {
+  description = " Area of the MOJ responsible for the service"
+  default     = "mojdigital"
+}
+
+variable "application" {}
+
+variable "is-production" {
+  default = "false"
+}
+
+variable "environment-name" {}
+
+variable "infrastructure-support" {
+  description = "The team responsible for managing the infrastructure. Should be of the form <team-name> (<team-email>)"
+}
+
 variable "ec_engine" {
     description = "The engine which your ElastiCache Cluster will use. You have a choice of either 'redis' or 'memcached'. The default is 'redis'"
     type = "string"
