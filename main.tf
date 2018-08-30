@@ -20,3 +20,16 @@ resource "aws_elasticache_cluster" "ec_cluster" {
   }
 }
 
+resource "aws_elasticache_subnet_group" "ec_subnet" {
+  name       = "${var.application}-${var.environment-name}-ec-subnet-group"
+  subnet_ids = "${var.ec_subnet_groups}"
+
+  tags {
+        business-unit           = "${var.business-unit}"
+        application             = "${var.application}"
+        is-production           = "${var.is-production}"
+        environment-name        = "${var.environment-name}"
+        owner                   = "${var.team_name}"
+        infrastructure-support  = "${var.infrastructure-support}"
+    }
+}

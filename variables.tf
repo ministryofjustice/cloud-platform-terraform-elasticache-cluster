@@ -55,3 +55,8 @@ variable "port" {
     description = "The port number of your ElastiCache Cluster. Redis uses '6379' and Memached uses '11211'. The default will be '6379' with Redis being the assumed engine"
     default = 6379
 }
+
+variable "ec_subnet_groups" {
+    description = "A list of VPC subnet IDs."
+    default = ["subnet-7293103a", "subnet-7bf10c21", "subnet-de00b3b8"]
+}
