@@ -35,11 +35,6 @@ variable "parameter_group_name" {
     default = "default.redis4.0"
 }
 
-variable "cluster_id" {
-    description = "The desired name of your ElastiCache cluster"
-    type = "string"
-}
-
 variable "node_type" {
     description = "The cache node type for your cluster. The default is 'cache.m3.medium' which is considered to have moderate network preformance."
     type = "string"
@@ -59,9 +54,4 @@ variable "port" {
 variable "ec_subnet_groups" {
     description = "A list of VPC subnet IDs."
     default = ["subnet-7293103a", "subnet-7bf10c21", "subnet-de00b3b8"]
-}
-
-variable "ec_vpc_security_group_ids" {
-    description = "List of VPC security groups to associate"
-    default = ["sg-7e8cf203", "sg-7e8cf203"]
 }
