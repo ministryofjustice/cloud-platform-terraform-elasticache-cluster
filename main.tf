@@ -33,3 +33,17 @@ resource "aws_elasticache_subnet_group" "ec_subnet" {
         infrastructure-support  = "${var.infrastructure-support}"
     }
 }
+
+resource "aws_elasticache_security_group" "ec_sg" {
+  name                 = "elasticache-security-group"
+  security_group_names = ["${var.ec_vpc_security_group_ids}"]
+
+  tags {
+        business-unit           = "${var.business-unit}"
+        application             = "${var.application}"
+        is-production           = "${var.is-production}"
+        environment-name        = "${var.environment-name}"
+        owner                   = "${var.team_name}"
+        infrastructure-support  = "${var.infrastructure-support}"
+    }
+}
