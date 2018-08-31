@@ -3,7 +3,7 @@
 }
 
     module "example_team_ec_cluster" {
-    source = "../"
+    source = "github.com/ministryofjustice/cloud-platform-terraform-elasticache-cluster"
 
     team_name                 = "example-repo"
     ec_engine                 = "redis"
