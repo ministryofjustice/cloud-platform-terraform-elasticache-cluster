@@ -4,5 +4,5 @@ output "cache_nodes" {
 }
 
 output "endpoint" {
-  value = "${join(":", list(aws_elasticache_cluster.redis.cache_nodes.0.address, aws_elasticache_cluster.redis.cache_nodes.0.port))}"
+  value = "${join(":", list(aws_elasticache_cluster.ec_cluster.0.address, aws_elasticache_cluster.ec_cluster.0.port))}"
 }
