@@ -6,7 +6,7 @@ resource "random_id" "id" {
 }
 
 resource "aws_elasticache_cluster" "ec_cluster" {
-  cluster_id           = "cp-${random_id.id.hex}"
+  cluster_id           = "${var.team_name}-${random_id.id.hex}"
   engine               = "${var.ec_engine}"
   engine_version       = "${var.engine_version}"
   node_type            = "${var.node_type}"
