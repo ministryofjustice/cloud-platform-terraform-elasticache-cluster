@@ -2,11 +2,11 @@ data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
 resource "random_id" "id" {
-  byte_length = 4
+  byte_length = 8
 }
 
 resource "aws_elasticache_cluster" "ec_cluster" {
-  cluster_id           = "${var.application}-${random_id.id.hex}"
+  cluster_id           = "cp-${random_id.id.hex}"
   engine               = "${var.ec_engine}"
   engine_version       = "${var.engine_version}"
   node_type            = "${var.node_type}"
@@ -26,6 +26,6 @@ resource "aws_elasticache_cluster" "ec_cluster" {
 }
 
 resource "aws_elasticache_subnet_group" "ec_subnet" {
-  name       = "${var.application}-${var.environment-name}-ec-subnet-group"
+  name       = "ec-sg-${random_id.id.hex}"
   subnet_ids = "${var.ec_subnet_groups}"
 }
