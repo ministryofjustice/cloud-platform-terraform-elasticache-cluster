@@ -4,5 +4,5 @@ output "cache_nodes" {
 }
 
 output "endpoint" {
-  value = "${join(":", list(module.example_team_ec_cluster.cache_nodes.0.address, module.example_team_ec_cluster.cache_nodes.0.port))}"
+  value = "${lookup(module.example_team_ec_cluster.cache_nodes[0],"address")}:${lookup(module.example_team_ec_cluster.cache_nodes[0],"port")}"
 }
