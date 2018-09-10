@@ -3,7 +3,7 @@ provider "aws" {
 }
 
 module "example_team_ec_cluster" {
-  source = "github.com/ministryofjustice/cloud-platform-terraform-elasticache-cluster"
+  source = "github.com/ministryofjustice/cloud-platform-terraform-elasticache-cluster?ref=v1.0"
 
   team_name              = "example-repo"
   ec_engine              = "redis"
