@@ -51,7 +51,10 @@ variable "port" {
   default     = 6379
 }
 
-variable "ec_subnet_groups" {
-  description = "A list of VPC subnet IDs."
-  default     = ["subnet-dcec1186", "subnet-cb03b0ad", "subnet-568c0f1e"]
+variable "cluster_name" {
+  description = "The name of the cluster (eg.: cloud-platform-live-0)"
+}
+
+variable "cluster_state_bucket" {
+  description = "The name of the S3 bucket holding the terraform state for the cluster"
 }
