@@ -12,7 +12,6 @@ module "example_team_ec_cluster" {
   node_type              = "cache.m3.medium"
   number_of_nodes        = 1
   port                   = 6379
-  ec_subnet_groups       = ["subnet-7293103a", "subnet-7bf10c21", "subnet-de00b3b8"]
   business-unit          = "example-bu"
   application            = "exampleapp"
   is-production          = "false"

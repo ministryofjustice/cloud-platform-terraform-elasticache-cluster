@@ -18,7 +18,6 @@ module "example_team_ec_cluster" {
     node_type                 = "cache.m3.medium"
     number_of_nodes           = 1
     port                      = 6379
-    ec_subnet_groups          = ["subnet-7293103a", "subnet-7bf10c21", "subnet-de00b3b8"]
     business-unit             = "example-bu"
     application               = "exampleapp"
     is-production             = "false"
@@ -36,7 +35,7 @@ module "example_team_ec_cluster" {
 | node_type | The instance type of the EC cluster | string | `cache.m3.medium` | no |
 | number_of_nodes | Number of nodes in the cluster | string | 1 | no
 | port | Port number of the EC Cluster | string | `6379` | no |
-| ec_subnet_groups | The subnet groups of the VPC the EC Cluster is to deploy in | string | `["subnet-7293103a", "subnet-7bf10c21", "subnet-de00b3b8"]` | no |
+| ec_subnet_groups | The subnet groups of the VPC the EC Cluster is to deploy in | string | `"subnet-dcec1186", "subnet-cb03b0ad", "subnet-568c0f1e"` | no |
 
 
 ### Tags

@@ -53,5 +53,5 @@ variable "port" {
 
 variable "ec_subnet_groups" {
   description = "A list of VPC subnet IDs."
-  default     = ["subnet-7293103a", "subnet-7bf10c21", "subnet-de00b3b8"]
+  default     = ["subnet-dcec1186", "subnet-cb03b0ad", "subnet-568c0f1e"]
 }
