@@ -3,8 +3,15 @@ provider "aws" {
 }
 
 module "example_team_ec_cluster" {
-  # source = "github.com/ministryofjustice/cloud-platform-terraform-elasticache-cluster?ref=1.0"
-  source = "../"
+  source = "github.com/ministryofjustice/cloud-platform-terraform-elasticache-cluster?ref=1.0"
+
+  /*
+   * When using this module through the cloud-platform-environments, the
+   * following two variables are automatically supplied by the pipeline.
+   *
+   */
+  // cluster_name           = "cloud-platform-live-0"
+  // cluster_state_bucket   = "cloud-platform-cluster-state-bucket"
 
   team_name              = "example-repo"
   ec_engine              = "redis"

@@ -23,7 +23,7 @@ module "example_team_ec_cluster" {
     is-production             = "false"
     environment-name          = "development"
     infrastructure-support    = "example-team@digtal.justice.gov.uk"
-    }
+}
 ```
 ## Inputs
 
@@ -35,7 +35,8 @@ module "example_team_ec_cluster" {
 | node_type | The instance type of the EC cluster | string | `cache.m3.medium` | no |
 | number_of_nodes | Number of nodes in the cluster | string | 1 | no
 | port | Port number of the EC Cluster | string | `6379` | no |
-| ec_subnet_groups | The subnet groups of the VPC the EC Cluster is to deploy in | string | `"subnet-dcec1186", "subnet-cb03b0ad", "subnet-568c0f1e"` | no |
+| cluster_name | The name of the cluster (eg.: cloud-platform-live-0) | string | - | yes |
+| cluster_state_bucket | The name of the S3 bucket holding the terraform state for the cluster | string | - | yes |
 
 
 ### Tags
@@ -63,4 +64,3 @@ https://ministryofjustice.github.io/technical-guidance/standards/documenting-inf
 ## Reading Material
 
 - https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/WhatIs.html
-

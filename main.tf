@@ -5,6 +5,16 @@ resource "random_id" "id" {
   byte_length = 8
 }
 
+data "terraform_remote_state" "cluster" {
+  backend = "s3"
+
+  config {
+    bucket = "${var.cluster_state_bucket}"
+    region = "eu-west-1"
+    key    = "/env:/${var.cluster_name}/terraform.tfstate"
+  }
+}
+
 resource "aws_elasticache_cluster" "ec_cluster" {
   cluster_id           = "cp-${random_id.id.hex}"
   engine               = "${var.ec_engine}"
@@ -27,5 +37,5 @@ resource "aws_elasticache_cluster" "ec_cluster" {
 
 resource "aws_elasticache_subnet_group" "ec_subnet" {
   name       = "ec-sg-${random_id.id.hex}"
-  subnet_ids = "${var.ec_subnet_groups}"
+  subnet_ids = ["${data.terraform_remote_state.cluster.internal_subnets_ids}"]
 }
