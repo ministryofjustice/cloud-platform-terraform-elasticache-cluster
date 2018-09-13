@@ -15,6 +15,30 @@ data "terraform_remote_state" "cluster" {
   }
 }
 
+resource "aws_security_group" "ec" {
+  name        = "cp-${random_id.id.hex}"
+  description = "Allow inbound traffic from kubernetes private subnets"
+  vpc_id      = "${data.terraform_remote_state.cluster.vpc_id}"
+
+  // We cannot use `${aws_db_instance.rds.port}` here because it creates a
+  // cyclic dependency. Rather than resorting to `aws_security_group_rule` which
+  // is not ideal for managing rules, we will simply allow traffic to all ports.
+  // This does not compromise security as the instance only listens on one port.
+  ingress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["${data.terraform_remote_state.cluster.internal_subnets}"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["${data.terraform_remote_state.cluster.internal_subnets}"]
+  }
+}
+
 resource "aws_elasticache_cluster" "ec_cluster" {
   cluster_id           = "cp-${random_id.id.hex}"
   engine               = "${var.ec_engine}"
@@ -24,6 +48,7 @@ resource "aws_elasticache_cluster" "ec_cluster" {
   parameter_group_name = "${var.parameter_group_name}"
   port                 = "${var.port}"
   subnet_group_name    = "${aws_elasticache_subnet_group.ec_subnet.name}"
+  security_group_ids   = ["${aws_security_group.ec.id}"]
 
   tags {
     business-unit          = "${var.business-unit}"
