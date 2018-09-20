@@ -3,23 +3,16 @@ provider "aws" {
 }
 
 module "example_team_ec_cluster" {
-  source = "github.com/ministryofjustice/cloud-platform-terraform-elasticache-cluster?ref=1.0"
+  source = "github.com/ministryofjustice/cloud-platform-terraform-elasticache-cluster"
 
-  /*
-   * When using this module through the cloud-platform-environments, the
-   * following two variables are automatically supplied by the pipeline.
-   *
-   */
-  // cluster_name           = "cloud-platform-live-0"
-  // cluster_state_bucket   = "cloud-platform-cluster-state-bucket"
-
+  cluster_name           = "cloud-platform-live-0"
+  cluster_state_bucket   = "moj-cp-k8s-investigation-platform-terraform"
   team_name              = "example-repo"
-  ec_engine              = "redis"
   engine_version         = "4.0.10"
   parameter_group_name   = "default.redis4.0"
   node_type              = "cache.m3.medium"
-  number_of_nodes        = 1
-  port                   = 6379
+  number_cache_clusters  = "3"
+  replication_group_description = "example description"
   business-unit          = "example-bu"
   application            = "exampleapp"
   is-production          = "false"

@@ -1,4 +1,19 @@
-output "cache_nodes" {
-  description = "List of node objects including id, address, port and availability_zone."
-  value       = "${aws_elasticache_cluster.ec_cluster.cache_nodes}"
+output "id" {
+  description = "The ID of the ElastiCache Replication Group."
+  value       = "${aws_elasticache_replication_group.ec_redis.id}"
+}
+
+output "primary_endpoint_address" {
+  description = "The address of the endpoint for the primary node in the replication group, if the cluster mode is disabled."
+  value       = "${aws_elasticache_replication_group.ec_redis.primary_endpoint_address}"
+}
+
+output "member_clusters" {
+  description = "The identifiers of all the nodes that are part of this replication group."
+  value       = "${aws_elasticache_replication_group.ec_redis.member_clusters}"
+}
+
+output "auth_token" {
+  description = "The password used to access the Redis protected server."
+  value       = "${aws_elasticache_replication_group.ec_redis.auth_token}"
 }

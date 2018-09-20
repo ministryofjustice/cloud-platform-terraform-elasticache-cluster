@@ -1,8 +1,8 @@
 # Example AWS ElastiCache Cluster creation
 
-The configuration in this directory creates an example AWS Redis ElastiCache Cluster. It also creates an ElastiCache subnet group for the `live-0` VPC.  
+The configuration in this directory creates an example AWS Redis ElastiCache Cluster Replication Group. It also creates an ElastiCache subnet group for the `live-0` VPC.  
 
-This example outputs a list of node objects including id, address, port and availability_zone.
+This example outputs ID, primary_endpoint_address, member_clusters, and the auth_token which is the password to gain access to the Redis Server.
 
 ## Usage
 
