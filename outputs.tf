@@ -1,5 +1,5 @@
 output "id" {
-  description = "The ID of the ElastiCache Replication Group."
+  description = "The ID of the ElastiCache Replication Group. This should start with 'cp-' followed by a hexidecimal value."
   value       = "${aws_elasticache_replication_group.ec_redis.id}"
 }
 

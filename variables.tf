@@ -23,11 +23,6 @@ variable "engine_version" {
   default     = "4.0.10"
 }
 
-variable "replication_group_description" {
-  description = "A short description of the replication group"
-  type        = "string"
-}
-
 variable "parameter_group_name" {
   description = "Name of the parameter group to associate with this cache cluster. Again this will differ between the use of 'redis' or 'memcached' and your engine version. The default is 'default.redis4.0'."
   type        = "string"
@@ -37,7 +32,7 @@ variable "parameter_group_name" {
 variable "number_cache_clusters" {
   description = "The number of cache clusters (primary and replicas) this replication group will have. Default is 2"
   type        = "string"
-  default     = "3"
+  default     = "2"
 }
 
 variable "node_type" {

@@ -1,5 +1,5 @@
 output "id" {
-  description = "The ID of the ElastiCache Replication Group."
+  description = "The ID of the ElastiCache Replication Group. This should start with 'cp-' followed by a hexidecimal value."
   value       = "${module.example_team_ec_cluster.id}"
 }
 

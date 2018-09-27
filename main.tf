@@ -49,9 +49,9 @@ resource "aws_security_group" "ec" {
 
 resource "aws_elasticache_replication_group" "ec_redis" {
   automatic_failover_enabled    = true
-  availability_zones            = ["${data.terraform_remote_state.cluster.availability_zones}"]
+  availability_zones            = ["${slice(data.terraform_remote_state.cluster.availability_zones,0,var.number_cache_clusters)}"]
   replication_group_id          = "cp-${random_id.id.hex}"
-  replication_group_description = "${var.replication_group_description}"
+  replication_group_description = "${var.team_name}-${var.application}-${var.environment-name}-desc"
   engine                        = "redis"
   engine_version                = "${var.engine_version}"
   node_type                     = "${var.node_type}"
@@ -62,7 +62,7 @@ resource "aws_elasticache_replication_group" "ec_redis" {
   security_group_ids            = ["${aws_security_group.ec.id}"]
   at_rest_encryption_enabled    = true
   transit_encryption_enabled    = true
-  auth_token                    = "${random_id.id.hex}"
+  auth_token                    = "${random_id.id2.hex}"
 
   tags {
     business-unit          = "${var.business-unit}"
