@@ -40,7 +40,6 @@ module "example_team_ec_cluster" {
 | engine_version | Redis ElastiCache engine version | string | `4.0.10` | no |
 | parameter_group_name | ElastiCache engine parameter group name| string | `default.redis4.0` | no |
 | node_type | The instance type of the EC cluster | string | `cache.m3.medium` | no |
-| number_cache_clusters | The number of cache clusters (primary and replicas) this replication group will have. | string | 3 | no |
 | cluster_name | The name of the cluster (eg.: cloud-platform-live-0) | string | - | yes |
 | cluster_state_bucket | The name of the S3 bucket holding the terraform state for the cluster | string | - | yes |
 

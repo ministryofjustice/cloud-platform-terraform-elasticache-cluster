@@ -1,7 +1,3 @@
-provider "aws" {
-  region = "eu-west-1"
-}
-
 module "example_team_ec_cluster" {
   source = "github.com/ministryofjustice/cloud-platform-terraform-elasticache-cluster?ref=2.0"
 
