@@ -1,8 +1,3 @@
-output "id" {
-  description = "The ID of the ElastiCache Replication Group. This should start with 'cp-' followed by a hexidecimal value."
-  value       = "${aws_elasticache_replication_group.ec_redis.id}"
-}
-
 output "primary_endpoint_address" {
   description = "The address of the endpoint for the primary node in the replication group, if the cluster mode is disabled."
   value       = "${aws_elasticache_replication_group.ec_redis.primary_endpoint_address}"

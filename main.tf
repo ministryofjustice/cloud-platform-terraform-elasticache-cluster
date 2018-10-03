@@ -5,7 +5,7 @@ resource "random_id" "id" {
   byte_length = 8
 }
 
-resource "random_id" "id2" {
+resource "random_id" "auth_token" {
   byte_length = 32
 }
 
@@ -47,7 +47,7 @@ resource "aws_elasticache_replication_group" "ec_redis" {
   automatic_failover_enabled    = true
   availability_zones            = ["${slice(data.terraform_remote_state.cluster.availability_zones,0,var.number_cache_clusters)}"]
   replication_group_id          = "cp-${random_id.id.hex}"
-  replication_group_description = "${var.team_name}-${var.application}-${var.environment-name}-desc"
+  replication_group_description = "team=${var.team_name} / app=${var.application} / env=${var.environment-name}"
   engine                        = "redis"
   engine_version                = "${var.engine_version}"
   node_type                     = "${var.node_type}"
@@ -58,7 +58,7 @@ resource "aws_elasticache_replication_group" "ec_redis" {
   security_group_ids            = ["${aws_security_group.ec.id}"]
   at_rest_encryption_enabled    = true
   transit_encryption_enabled    = true
-  auth_token                    = "${random_id.id2.hex}"
+  auth_token                    = "${random_id.auth_token.hex}"
 
   tags {
     business-unit          = "${var.business-unit}"
