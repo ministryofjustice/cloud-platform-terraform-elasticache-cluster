@@ -1,9 +1,5 @@
 # cloud-platform-terraform-elasticache-cluster
-This Terraform module will create an ElastiCache Redis Cluster Replication Group in AWS. The module is built with the Redis engine. This module **does not** supports Memcached. The Terraform module will also create an ElastiCache subnet group.
-
-The ElastiCache Cluster that's created will have a partly randomly generated name and as the user, you will have no control over it's name. This is to ensure the name complies with the strict validation checks. The name will take the form of `cp-${random_id.id.hex}` with a hex string length of 8 alphanumeric characters.
-
-The ElastiCache Cluster will be deployed into the `live-0` VPC. This is done through the `aws_elasticache_subnet_group` resource which makes reference to the subnet group list for `live-0` which is the set default in the `variables.tf` file.
+This Terraform module will create an ElastiCache Redis Cluster Replication Group in AWS. The module is built for the Redis engine. This module **does not** support Memcached.
 
 ## Usage
 
@@ -11,14 +7,10 @@ The ElastiCache Cluster will be deployed into the `live-0` VPC. This is done thr
 module "example_team_ec_cluster" {
   source = "github.com/ministryofjustice/cloud-platform-terraform-elasticache-cluster"
 
-  /*
-    * When using this module through the cloud-platform-environments, the
-    * following two variables are automatically supplied by the pipeline.
-    *
-    */
-  // cluster_name           = "cloud-platform-live-0"
-  // cluster_state_bucket   = "cloud-platform-cluster-state-bucket"
+  // The first two inputs are provided by the pipeline for cloud-platform. See the example for more detail.
 
+  cluster_name                  = "cloud-platform-live-0"
+  cluster_state_bucket          = "live-0-state-bucket"
   team_name                     = "example-repo"
   engine_version                = "4.0.10"
   parameter_group_name          = "default.redis4.0"
@@ -36,7 +28,6 @@ module "example_team_ec_cluster" {
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
-| replication_group_description | A short description of the Redis replication group. | string | - | yes |
 | engine_version | Redis ElastiCache engine version | string | `4.0.10` | no |
 | parameter_group_name | ElastiCache engine parameter group name| string | `default.redis4.0` | no |
 | node_type | The instance type of the EC cluster | string | `cache.m3.medium` | no |
@@ -46,9 +37,7 @@ module "example_team_ec_cluster" {
 
 ### Tags
 
-Some of the inputs are tags. All infrastructure resources need to be tagged according to MOJ techincal guidence. The tags are stored as variables that you will need to fill out as part of your module.
-
-https://ministryofjustice.github.io/technical-guidance/standards/documenting-infrastructure-owners/#documenting-owners-of-infrastructure
+Some of the inputs are tags. All infrastructure resources need to be tagged according to the [MOJ techincal guidence](https://ministryofjustice.github.io/technical-guidance/standards/documenting-infrastructure-owners/#documenting-owners-of-infrastructure). The tags are stored as variables that you will need to fill out as part of your module.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
@@ -63,7 +52,6 @@ https://ministryofjustice.github.io/technical-guidance/standards/documenting-inf
 
 | Name | Description |
 |------|-------------|
-| ID | The ID of the ElastiCache Replication Group. |
 | primary_endpoint_address | The address of the endpoint for the primary node in the replication group, if the cluster mode is disabled. |
 | member_clusters | The identifiers of all the nodes that are part of this replication group. |
 | auth_token | The password used to access the Redis protected server. |
