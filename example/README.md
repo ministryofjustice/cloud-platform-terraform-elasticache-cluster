@@ -1,4 +1,4 @@
-# Example AWS ElastiCache Cluster creation
+# Example AWS ElastiCache Cluster configuration
 
 The configuration in this directory creates an example AWS Redis ElastiCache Cluster Replication Group.
 

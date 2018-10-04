@@ -1,17 +1,25 @@
-variable "team_name" {}
-
-variable "business-unit" {
-  description = " Area of the MOJ responsible for the service"
-  default     = "mojdigital"
+variable "cluster_name" {
+  description = "The name of the cluster (eg.: cloud-platform-live-0)"
 }
 
+variable "cluster_state_bucket" {
+  description = "The name of the S3 bucket holding the terraform state for the cluster"
+}
+
+variable "team_name" {}
+
 variable "application" {}
+
+variable "environment-name" {}
 
 variable "is-production" {
   default = "false"
 }
 
-variable "environment-name" {}
+variable "business-unit" {
+  description = "Area of the MOJ responsible for the service"
+  default     = "mojdigital"
+}
 
 variable "infrastructure-support" {
   description = "The team responsible for managing the infrastructure. Should be of the form <team-name> (<team-email>)"
@@ -39,12 +47,4 @@ variable "node_type" {
   description = "The cache node type for your cluster. The default is 'cache.m3.medium' which is considered to have moderate network preformance."
   type        = "string"
   default     = "cache.m3.medium"
-}
-
-variable "cluster_name" {
-  description = "The name of the cluster (eg.: cloud-platform-live-0)"
-}
-
-variable "cluster_state_bucket" {
-  description = "The name of the S3 bucket holding the terraform state for the cluster"
 }
