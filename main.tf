@@ -5,6 +5,10 @@ resource "random_id" "id" {
   byte_length = 8
 }
 
+resource "random_id" "auth_token" {
+  byte_length = 32
+}
+
 data "terraform_remote_state" "cluster" {
   backend = "s3"
 
@@ -39,16 +43,22 @@ resource "aws_security_group" "ec" {
   }
 }
 
-resource "aws_elasticache_cluster" "ec_cluster" {
-  cluster_id           = "cp-${random_id.id.hex}"
-  engine               = "${var.ec_engine}"
-  engine_version       = "${var.engine_version}"
-  node_type            = "${var.node_type}"
-  num_cache_nodes      = "${var.number_of_nodes}"
-  parameter_group_name = "${var.parameter_group_name}"
-  port                 = "${var.port}"
-  subnet_group_name    = "${aws_elasticache_subnet_group.ec_subnet.name}"
-  security_group_ids   = ["${aws_security_group.ec.id}"]
+resource "aws_elasticache_replication_group" "ec_redis" {
+  automatic_failover_enabled    = true
+  availability_zones            = ["${slice(data.terraform_remote_state.cluster.availability_zones,0,var.number_cache_clusters)}"]
+  replication_group_id          = "cp-${random_id.id.hex}"
+  replication_group_description = "team=${var.team_name} / app=${var.application} / env=${var.environment-name}"
+  engine                        = "redis"
+  engine_version                = "${var.engine_version}"
+  node_type                     = "${var.node_type}"
+  number_cache_clusters         = "${var.number_cache_clusters}"
+  parameter_group_name          = "${var.parameter_group_name}"
+  port                          = 6379
+  subnet_group_name             = "${aws_elasticache_subnet_group.ec_subnet.name}"
+  security_group_ids            = ["${aws_security_group.ec.id}"]
+  at_rest_encryption_enabled    = true
+  transit_encryption_enabled    = true
+  auth_token                    = "${random_id.auth_token.hex}"
 
   tags {
     business-unit          = "${var.business-unit}"
