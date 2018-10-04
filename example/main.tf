@@ -6,15 +6,22 @@ provider "aws" {
   region = "eu-west-1"
 }
 
-// The following two variables are provided at runtime by the pipeline.
+/*
+ * When using this module through the cloud-platform-environments, the following
+ * two variables are automatically supplied by the pipeline.
+ *
+ */
 
 variable "cluster_name" {}
 
 variable "cluster_state_bucket" {}
 
-// Make sure that you use the latest version of the module by changing the
-// `ref=` value in the `source` attribute to the latest version listed on the
-// releases page of this repository.
+/*
+ * Make sure that you use the latest version of the module by changing the
+ * `ref=` value in the `source` attribute to the latest version listed on the
+ * releases page of this repository.
+ *
+ */
 module "example_team_ec_cluster" {
   source = "github.com/ministryofjustice/cloud-platform-terraform-elasticache-cluster?ref=2.0"
 
@@ -28,7 +35,7 @@ module "example_team_ec_cluster" {
   infrastructure-support = "example-team@digtal.justice.gov.uk"
 }
 
-resource "kubernetes_secret" "elasticache" {
+resource "kubernetes_secret" "example_team_ec_cluster" {
   metadata {
     name      = "example-team-ec-cluster-output"
     namespace = "my-namespace"
