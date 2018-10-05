@@ -43,7 +43,7 @@ resource "kubernetes_secret" "example_team_ec_cluster" {
 
   data {
     primary_endpoint_address = "${module.example_team_ec_cluster.primary_endpoint_address}"
-    member_clusters          = "${module.example_team_ec_cluster.member_clusters}"
+    member_clusters          = "${jsonencode(module.example_team_ec_cluster.member_clusters)}"
     auth_token               = "${module.example_team_ec_cluster.auth_token}"
   }
 }
