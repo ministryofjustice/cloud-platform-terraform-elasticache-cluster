@@ -56,6 +56,48 @@ Some of the inputs are tags. All infrastructure resources need to be tagged acco
 | member_clusters | The identifiers of all the nodes that are part of this replication group. |
 | auth_token | The password used to access the Redis protected server. |
 
+## Access outside the cluster
+
+Your redis instance is reachable only from the cluster pods; for tasks like inspecting your cache, import `kubectl forward` can create an authenticated tunnel, with a 2-step process:
+
+1. Create a forwarding pod, any small image that does TCP will do:
+```
+kubectl --context live-0 -n NAMESPACE run port-forward --generator=run-pod/v1 --image=djfaze/port-forward --port=6379 --env="REMOTE_HOST=REDIS_HOST" --env="REMOTE_PORT=6379"
+```
+2. Forward the DB port
+```
+kubectl --context live-0 -n NAMESPACE port-forward port-forward 6379:80
+```
+
+3. Install [stunnel](https://www.stunnel.org/) via your package manager
+
+4. Create a stunnel config (redis-ssl.conf) that looks like
+```
+fips = no
+foreground = yes
+pid = stunnel.pid
+debug = 7
+delay = yes
+options = NO_SSLv2
+options = NO_SSLv3
+[redis-cli]
+   client = yes
+   accept = 127.0.0.1:6380
+   connect = 127.0.0.1:6379
+```
+
+5. Create your secure tunnel
+```
+sudo stunnel redis-ssl.conf
+```
+
+With this, client tools can access Redis via 127.0.0.1 on port 6380. Note, you need to provide your password
+
+```
+redis-cli -u redis://:PASSWORD@127.0.0.1:6380
+```
+
+
 ## Reading Material
 
 - https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/WhatIs.html
