@@ -23,8 +23,7 @@ variable "cluster_state_bucket" {}
  *
  */
 module "example_team_ec_cluster" {
-  source = "github.com/ministryofjustice/cloud-platform-terraform-elasticache-cluster?ref=2.0"
-
+  source = "github.com/ministryofjustice/cloud-platform-terraform-elasticache-cluster?ref=3.0"
   cluster_name           = "${var.cluster_name}"
   cluster_state_bucket   = "${var.cluster_state_bucket}"
   team_name              = "example-repo"
@@ -33,6 +32,7 @@ module "example_team_ec_cluster" {
   is-production          = "false"
   environment-name       = "development"
   infrastructure-support = "example-team@digtal.justice.gov.uk"
+  aws_region             = "eu-west-2"
 }
 
 resource "kubernetes_secret" "example_team_ec_cluster" {
