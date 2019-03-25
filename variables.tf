@@ -46,7 +46,7 @@ variable "number_cache_clusters" {
 variable "node_type" {
   description = "The cache node type for your cluster. The default is 'cache.m3.medium' which is considered to have moderate network preformance."
   type        = "string"
-  default     = "cache.m3.medium"
+  default     = "cache.t2.medium"
 }
 
 variable "aws_region" {
