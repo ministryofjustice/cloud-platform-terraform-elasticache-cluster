@@ -33,6 +33,7 @@ module "example_team_ec_cluster" {
   is-production          = "false"
   environment-name       = "development"
   infrastructure-support = "example-team@digtal.justice.gov.uk"
+  aws_region             = "eu-west-2"
 }
 
 resource "kubernetes_secret" "example_team_ec_cluster" {

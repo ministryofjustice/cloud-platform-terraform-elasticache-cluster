@@ -1,6 +1,11 @@
 data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
+provider "aws" {
+  alias  = "destination"
+  region = "${var.aws_region}"
+}
+
 resource "random_id" "id" {
   byte_length = 8
 }
@@ -20,6 +25,7 @@ data "terraform_remote_state" "cluster" {
 }
 
 resource "aws_security_group" "ec" {
+  provider = "aws.destination"
   name        = "cp-${random_id.id.hex}"
   description = "Allow inbound traffic from kubernetes private subnets"
   vpc_id      = "${data.terraform_remote_state.cluster.vpc_id}"
@@ -44,6 +50,7 @@ resource "aws_security_group" "ec" {
 }
 
 resource "aws_elasticache_replication_group" "ec_redis" {
+  provider                      = "aws.destination"
   automatic_failover_enabled    = true
   availability_zones            = ["${slice(data.terraform_remote_state.cluster.availability_zones,0,var.number_cache_clusters)}"]
   replication_group_id          = "cp-${random_id.id.hex}"
@@ -71,6 +78,7 @@ resource "aws_elasticache_replication_group" "ec_redis" {
 }
 
 resource "aws_elasticache_subnet_group" "ec_subnet" {
+  provider   = "aws.destination"
   name       = "ec-sg-${random_id.id.hex}"
   subnet_ids = ["${data.terraform_remote_state.cluster.internal_subnets_ids}"]
 }

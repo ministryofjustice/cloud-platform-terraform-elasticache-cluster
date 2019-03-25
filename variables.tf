@@ -48,3 +48,8 @@ variable "node_type" {
   type        = "string"
   default     = "cache.m3.medium"
 }
+
+variable "aws_region" {
+  description = "Region into which the resource will be created."
+  default     = "eu-west-2"
+}
