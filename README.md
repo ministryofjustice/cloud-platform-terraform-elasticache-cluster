@@ -1,6 +1,8 @@
 # cloud-platform-terraform-elasticache-cluster
 
-[![Releases](https://img.shields.io/github/release/ministryofjustice/cloud-platform-terraform-elasticache-cluster/all.svg?style=flat-square)](https://github.com/ministryofjustice/cloud-platform-terraform-elasticache-cluster/releases)
+<a href="https://github.com/ministryofjustice/cloud-platform-terraform-elasticache-cluster/releases">
+  <img src="https://img.shields.io/github/release/ministryofjustice/cloud-platform-terraform-elasticache-cluster/all.svg" alt="Releases" />
+</a>
 
 This Terraform module will create an ElastiCache Redis Cluster Replication Group in AWS. The module is built for the Redis engine. This module **does not** support Memcached.
 
