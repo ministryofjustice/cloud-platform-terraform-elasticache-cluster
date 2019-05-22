@@ -1,4 +1,9 @@
 # cloud-platform-terraform-elasticache-cluster
+
+<a href="https://github.com/ministryofjustice/cloud-platform-terraform-elasticache-cluster/releases">
+  <img src="https://img.shields.io/github/release/ministryofjustice/cloud-platform-terraform-elasticache-cluster/all.svg" alt="Releases" />
+</a>
+
 This Terraform module will create an ElastiCache Redis Cluster Replication Group in AWS. The module is built for the Redis engine. This module **does not** support Memcached.
 
 ## Usage
@@ -33,7 +38,7 @@ module "example_team_ec_cluster" {
 | node_type | The instance type of the EC cluster | string | `cache.m3.medium` | no |
 | cluster_name | The name of the cluster (eg.: cloud-platform-live-0) | string | - | yes |
 | cluster_state_bucket | The name of the S3 bucket holding the terraform state for the cluster | string | - | yes |
-| aws_region | region into which the resource will be created | string | eu-west-2 | no 
+| aws_region | region into which the resource will be created | string | eu-west-2 | no
 
 
 
