@@ -44,12 +44,7 @@ variable "number_cache_clusters" {
 }
 
 variable "node_type" {
-  description = "The cache node type for your cluster. The default is 'cache.m3.medium' which is considered to have moderate network preformance."
+  description = "The cache node type for your cluster. The next size up is cache.m4.large "
   type        = "string"
   default     = "cache.t2.medium"
-}
-
-variable "aws_region" {
-  description = "Region into which the resource will be created."
-  default     = "eu-west-2"
 }
