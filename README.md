@@ -38,7 +38,7 @@ module "example_team_ec_cluster" {
 | node_type | The instance type of the EC cluster | string | `cache.m3.medium` | no |
 | cluster_name | The name of the cluster (eg.: cloud-platform-live-0) | string | - | yes |
 | cluster_state_bucket | The name of the S3 bucket holding the terraform state for the cluster | string | - | yes |
-| aws_region | region into which the resource will be created | string | eu-west-2 | no
+| providers |  providers to use (including region) | string | - | -
 
 
 
