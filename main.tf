@@ -57,7 +57,7 @@ resource "aws_elasticache_replication_group" "ec_redis" {
   subnet_group_name             = "${aws_elasticache_subnet_group.ec_subnet.name}"
   security_group_ids            = ["${aws_security_group.ec.id}"]
   at_rest_encryption_enabled    = true
-  transit_encryption_enabled    = true
+  transit_encryption_enabled    = "${var.transit_encryption_enabled}"
   auth_token                    = "${random_id.auth_token.hex}"
   apply_immediately             = true
 

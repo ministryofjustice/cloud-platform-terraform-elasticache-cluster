@@ -25,6 +25,11 @@ variable "infrastructure-support" {
   description = "The team responsible for managing the infrastructure. Should be of the form <team-name> (<team-email>)"
 }
 
+variable "transit_encryption_enabled" {
+  description = "transit encryption"
+  default     = "true"
+}
+
 variable "engine_version" {
   description = "The engine version that your ElastiCache Cluster will use. This will differ between the use of 'redis' or 'memcached'. The default is '4.0.10' with redis being the assumed engine."
   type        = "string"

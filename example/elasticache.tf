@@ -15,14 +15,16 @@ variable "cluster_state_bucket" {}
  *
  */
 module "example_team_ec_cluster" {
-  source                 = "github.com/ministryofjustice/cloud-platform-terraform-elasticache-cluster?ref=3.1"
-  cluster_name           = "${var.cluster_name}"
-  cluster_state_bucket   = "${var.cluster_state_bucket}"
-  team_name              = "example-repo"
-  business-unit          = "example-bu"
-  application            = "exampleapp"
-  is-production          = "false"
-  environment-name       = "development"
+  source                     = "github.com/ministryofjustice/cloud-platform-terraform-elasticache-cluster?ref=3.1"
+  cluster_name               = "${var.cluster_name}"
+  cluster_state_bucket       = "${var.cluster_state_bucket}"
+  team_name                  = "example-repo"
+  business-unit              = "example-bu"
+  application                = "exampleapp"
+  is-production              = "false"
+  environment-name           = "development"
+  transit_encryption_enabled = "false"
+
   infrastructure-support = "example-team@digtal.justice.gov.uk"
 
   providers = {
