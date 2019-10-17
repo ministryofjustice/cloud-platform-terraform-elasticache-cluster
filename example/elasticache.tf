@@ -24,7 +24,6 @@ module "example_team_ec_cluster" {
   is-production          = "false"
   environment-name       = "development"
   infrastructure-support = "example-team@digtal.justice.gov.uk"
-
   providers = {
     aws = "aws.london"
   }
