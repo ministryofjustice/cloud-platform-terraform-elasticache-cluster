@@ -6,11 +6,14 @@ variable "cluster_state_bucket" {
   description = "The name of the S3 bucket holding the terraform state for the cluster"
 }
 
-variable "team_name" {}
+variable "team_name" {
+}
 
-variable "application" {}
+variable "application" {
+}
 
-variable "environment-name" {}
+variable "environment-name" {
+}
 
 variable "is-production" {
   default = "false"
@@ -27,24 +30,25 @@ variable "infrastructure-support" {
 
 variable "engine_version" {
   description = "The engine version that your ElastiCache Cluster will use. This will differ between the use of 'redis' or 'memcached'. The default is '4.0.10' with redis being the assumed engine."
-  type        = "string"
+  type        = string
   default     = "4.0.10"
 }
 
 variable "parameter_group_name" {
   description = "Name of the parameter group to associate with this cache cluster. Again this will differ between the use of 'redis' or 'memcached' and your engine version. The default is 'default.redis4.0'."
-  type        = "string"
+  type        = string
   default     = "default.redis4.0"
 }
 
 variable "number_cache_clusters" {
   description = "The number of cache clusters (primary and replicas) this replication group will have. Default is 2"
-  type        = "string"
+  type        = string
   default     = "2"
 }
 
 variable "node_type" {
   description = "The cache node type for your cluster. The next size up is cache.m4.large "
-  type        = "string"
+  type        = string
   default     = "cache.t2.medium"
 }
+
