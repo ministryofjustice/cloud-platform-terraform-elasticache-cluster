@@ -32,16 +32,16 @@ resource "aws_security_group" "ec" {
   // is not ideal for managing rules, we will simply allow traffic to all ports.
   // This does not compromise security as the instance only listens on one port.
   ingress {
-    from_port = 0
-    to_port   = 0
-    protocol  = "-1"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
     cidr_blocks = data.terraform_remote_state.cluster.outputs.internal_subnets
   }
 
   egress {
-    from_port = 0
-    to_port   = 0
-    protocol  = "-1"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
     cidr_blocks = data.terraform_remote_state.cluster.outputs.internal_subnets
   }
 }
@@ -79,7 +79,7 @@ resource "aws_elasticache_replication_group" "ec_redis" {
 }
 
 resource "aws_elasticache_subnet_group" "ec_subnet" {
-  name = "ec-sg-${random_id.id.hex}"
+  name       = "ec-sg-${random_id.id.hex}"
   subnet_ids = data.terraform_remote_state.cluster.outputs.internal_subnets_ids
 }
 
