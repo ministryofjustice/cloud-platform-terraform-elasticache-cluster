@@ -65,12 +65,23 @@ Some of the inputs are tags. All infrastructure resources need to be tagged acco
 Your redis instance is reachable only from the cluster pods; for tasks like inspecting your cache, import `kubectl forward` can create an authenticated tunnel, with a 2-step process:
 
 1. Create a forwarding pod, any small image that does TCP will do:
+
 ```
-kubectl --context live-0 -n NAMESPACE run port-forward --generator=run-pod/v1 --image=djfaze/port-forward --port=6379 --env="REMOTE_HOST=REDIS_HOST" --env="REMOTE_PORT=6379"
+kubectl \
+  -n [your namespace] \
+  run port-forward-pod \
+  --generator=run-pod/v1 \
+  --image=ministryofjustice/port-forward \
+  --port=6379 \
+  --env="REMOTE_HOST=[your redis host]" \
+  --env="LOCAL_PORT=6379" \
+  --env="REMOTE_PORT=6379"
 ```
+
 2. Forward the DB port
+
 ```
-kubectl --context live-0 -n NAMESPACE port-forward port-forward 6379:80
+kubectl --context live-0 -n NAMESPACE port-forward port-forward-pod 6379:80
 ```
 
 3. Install [stunnel](https://www.stunnel.org/) via your package manager
