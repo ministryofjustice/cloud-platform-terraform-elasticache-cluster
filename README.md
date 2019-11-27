@@ -10,23 +10,20 @@ This Terraform module will create an ElastiCache Redis Cluster Replication Group
 
 ```hcl
 module "example_team_ec_cluster" {
-  source = "github.com/ministryofjustice/cloud-platform-terraform-elasticache-cluster"
+  source = "github.com/ministryofjustice/cloud-platform-terraform-elasticache-cluster?ref=version"
 
   // The first two inputs are provided by the pipeline for cloud-platform. See the example for more detail.
-
-  cluster_name                  = "cloud-platform-live-0"
-  cluster_state_bucket          = "live-0-state-bucket"
-  team_name                     = "example-repo"
-  engine_version                = "4.0.10"
-  parameter_group_name          = "default.redis4.0"
-  node_type                     = "cache.m3.medium"
-  number_cache_clusters         = "3"
-  replication_group_description = "example description"
-  business-unit                 = "example-bu"
-  application                   = "exampleapp"
-  is-production                 = "false"
-  environment-name              = "development"
-  infrastructure-support        = "example-team@digtal.justice.gov.uk"
+  cluster_name           = var.cluster_name
+  cluster_state_bucket   = var.cluster_state_bucket
+  team_name              = "example-repo"
+  business-unit          = "example-bu"
+  application            = "exampleapp"
+  is-production          = "false"
+  environment-name       = "development"
+  infrastructure-support = "example-team@digtal.justice.gov.uk"
+  providers = {
+    aws = aws.london
+  }
 }
 ```
 ## Inputs
