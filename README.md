@@ -62,9 +62,9 @@ Some of the inputs are tags. All infrastructure resources need to be tagged acco
 
 ## Access outside the cluster
 
-Your redis instance is reachable only from the cluster pods; for tasks like inspecting your cache, import `kubectl forward` can create an authenticated tunnel, with a 2-step process:
+Your redis instance is reachable only from inside the cluster VPC, but you can use the same technique to access it from your development environment as for [accessing an RDS instance](https://user-guide.cloud-platform.service.justice.gov.uk/documentation/other-topics/rds-external-access.html#accessing-your-rds-database)
 
-1. Create a forwarding pod, any small image that does TCP will do:
+1. Run a port-forward pod
 
 ```
 kubectl \
@@ -73,46 +73,47 @@ kubectl \
   --generator=run-pod/v1 \
   --image=ministryofjustice/port-forward \
   --port=6379 \
-  --env="REMOTE_HOST=[your redis host]" \
+  --env="REMOTE_HOST=[your redis cluster hostname]" \
   --env="LOCAL_PORT=6379" \
   --env="REMOTE_PORT=6379"
 ```
 
-2. Forward the DB port
+2. Forward local traffic to the port-forward-pod
 
 ```
-kubectl --context live-0 -n NAMESPACE port-forward port-forward-pod 6379:80
+kubectl \
+  -n [your namespace] \
+  port-forward \
+  port-forward-pod 6379:6379
 ```
 
-3. Install [stunnel](https://www.stunnel.org/) via your package manager
+You need to leave this running as long as you are accessing the redis cluster.
 
-4. Create a stunnel config (redis-ssl.conf) that looks like
-```
-fips = no
-foreground = yes
-pid = stunnel.pid
-debug = 7
-delay = yes
-options = NO_SSLv2
-options = NO_SSLv3
-[redis-cli]
-   client = yes
-   accept = 127.0.0.1:6380
-   connect = 127.0.0.1:6379
-```
+3. Use the ruby redis client to access redis
 
-5. Create your secure tunnel
-```
-sudo stunnel redis-ssl.conf
-```
-
-With this, client tools can access Redis via 127.0.0.1 on port 6380. Note, you need to provide your password
+> At the time of writing, the `redis-cli` command-line tool cannot use encrypted redis connections (i.e. those with a URL starting `rediss://...` as opposed to `redis://...`). So, this section describes how to use the `redis` ruby gem to connect to your elasticache cluster.
 
 ```
-redis-cli -u redis://:PASSWORD@127.0.0.1:6380
+export REDIS_URL=[modified URL from namespace secret]
 ```
 
+The value here should be the redis URL from your namespace secret, but with the hostname replaced with `localhost`
 
-## Reading Material
+For instance, if the redis URL in your namespace secret is this:
 
-- https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/WhatIs.html
+```
+url: rediss://dummyuser:6a36be5513564382b436b36be55e15a5@master.cp-8f56be55d06be5548.iwfvzo.euw2.cache.amazonaws.com:6379
+```
+
+...then the value you need for `REDIS_URL` is:
+
+```
+rediss://dummyuser:6a36be5513564382b436b36be55e15a5@localhost:6379
+```
+
+Then you can use the ruby redis client like this:
+
+```
+ruby -r redis -e 'redis = Redis.new(uri: ENV.fetch("REDIS_URL"); redis.set("foo", 123); puts redis.get("foo")'
+```
+
