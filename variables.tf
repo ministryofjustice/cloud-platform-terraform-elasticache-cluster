@@ -29,15 +29,15 @@ variable "infrastructure-support" {
 }
 
 variable "engine_version" {
-  description = "The engine version that your ElastiCache Cluster will use. This will differ between the use of 'redis' or 'memcached'. The default is '4.0.10' with redis being the assumed engine."
+  description = "The engine version that your ElastiCache Cluster will use. This will differ between the use of 'redis' or 'memcached'. The default is '5.0.6' with redis being the assumed engine."
   type        = string
-  default     = "4.0.10"
+  default     = "5.0.6"
 }
 
 variable "parameter_group_name" {
-  description = "Name of the parameter group to associate with this cache cluster. Again this will differ between the use of 'redis' or 'memcached' and your engine version. The default is 'default.redis4.0'."
+  description = "Name of the parameter group to associate with this cache cluster. Again this will differ between the use of 'redis' or 'memcached' and your engine version. The default is 'default.redis5.0'."
   type        = string
-  default     = "default.redis4.0"
+  default     = "default.redis5.0"
 }
 
 variable "number_cache_clusters" {
