@@ -21,6 +21,7 @@ module "example_team_ec_cluster" {
   cluster_name           = var.cluster_name
   cluster_state_bucket   = var.cluster_state_bucket
   team_name              = "example-repo"
+  namespace              = var.namespace
   business-unit          = "example-bu"
   application            = "exampleapp"
   is-production          = "false"
@@ -35,7 +36,7 @@ module "example_team_ec_cluster" {
 resource "kubernetes_secret" "example_team_ec_cluster" {
   metadata {
     name      = "example-team-ec-cluster-output"
-    namespace = "my-namespace"
+    namespace = var.namespace
   }
 
   data = {
