@@ -69,6 +69,7 @@ resource "aws_elasticache_replication_group" "ec_redis" {
   apply_immediately             = true
 
   tags = {
+    namespace              = var.namespace
     business-unit          = var.business-unit
     application            = var.application
     is-production          = var.is-production
