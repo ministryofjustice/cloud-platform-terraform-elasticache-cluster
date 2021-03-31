@@ -1,7 +1,7 @@
-data "aws_caller_identity" "current" {
-}
-
-data "aws_region" "current" {
+data "aws_caller_identity" "current" {}
+data "aws_region" "current" {}
+data "aws_availability_zones" "available" {
+  state = "available"
 }
 
 resource "random_id" "id" {
@@ -12,20 +12,30 @@ resource "random_id" "auth_token" {
   byte_length = 32
 }
 
-data "terraform_remote_state" "cluster" {
-  backend = "s3"
-
-  config = {
-    bucket = var.cluster_state_bucket
-    region = "eu-west-1"
-    key    = "cloud-platform/${var.cluster_name}/terraform.tfstate"
+data "aws_vpc" "selected" {
+  filter {
+    name   = "tag:Name"
+    values = [var.cluster_name]
   }
+}
+
+data "aws_subnet_ids" "private" {
+  vpc_id = data.aws_vpc.selected.id
+
+  tags = {
+    SubnetType = "Private"
+  }
+}
+
+data "aws_subnet" "private" {
+  for_each = data.aws_subnet_ids.private.ids
+  id       = each.value
 }
 
 resource "aws_security_group" "ec" {
   name        = "cp-${random_id.id.hex}"
   description = "Allow inbound traffic from kubernetes private subnets"
-  vpc_id      = data.terraform_remote_state.cluster.outputs.vpc_id
+  vpc_id      = data.aws_vpc.selected.id
 
   // We cannot use `${aws_db_instance.rds.port}` here because it creates a
   // cyclic dependency. Rather than resorting to `aws_security_group_rule` which
@@ -35,21 +45,21 @@ resource "aws_security_group" "ec" {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = data.terraform_remote_state.cluster.outputs.internal_subnets
+    cidr_blocks = [for s in data.aws_subnet.private : s.cidr_block] 
   }
 
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = data.terraform_remote_state.cluster.outputs.internal_subnets
+    cidr_blocks = [for s in data.aws_subnet.private : s.cidr_block] 
   }
 }
 
 resource "aws_elasticache_replication_group" "ec_redis" {
   automatic_failover_enabled = true
   availability_zones = slice(
-    data.terraform_remote_state.cluster.outputs.availability_zones,
+    data.aws_availability_zones.available.names,
     0,
     var.number_cache_clusters,
   )
@@ -81,6 +91,6 @@ resource "aws_elasticache_replication_group" "ec_redis" {
 
 resource "aws_elasticache_subnet_group" "ec_subnet" {
   name       = "ec-sg-${random_id.id.hex}"
-  subnet_ids = data.terraform_remote_state.cluster.outputs.internal_subnets_ids
+  subnet_ids = data.aws_subnet_ids.private.ids
 }
 
