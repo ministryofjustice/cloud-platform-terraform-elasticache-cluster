@@ -7,9 +7,6 @@
 variable "cluster_name" {
 }
 
-variable "cluster_state_bucket" {
-}
-
 /*
  * Make sure that you use the latest version of the module by changing the
  * `ref=` value in the `source` attribute to the latest version listed on the
@@ -19,7 +16,6 @@ variable "cluster_state_bucket" {
 module "example_team_ec_cluster" {
   source                 = "github.com/ministryofjustice/cloud-platform-terraform-elasticache-cluster?ref=4.0"
   cluster_name           = var.cluster_name
-  cluster_state_bucket   = var.cluster_state_bucket
   team_name              = "example-repo"
   namespace              = var.namespace
   business-unit          = "example-bu"
