@@ -19,7 +19,7 @@ module "example_team_ec_cluster" {
   # source                 = "github.com/ministryofjustice/cloud-platform-terraform-elasticache-cluster?ref=5.2"
   cluster_name           = var.cluster_name
   team_name              = "example-repo"
-  namespace              = var.namespace
+  namespace              = "example-namespace"
   business-unit          = "example-bu"
   application            = "exampleapp"
   is-production          = "false"
