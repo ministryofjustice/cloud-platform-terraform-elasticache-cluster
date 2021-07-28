@@ -34,7 +34,7 @@ module "example_team_ec_cluster" {
 | node_type | The instance type of the EC cluster | string | `cache.m3.medium` | no |
 | cluster_name | The name of the cluster (eg.: cloud-platform-live-0) | string | - | yes |
 | providers |  providers to use (including region) | string | - | -
-
+| maintenance_window | Specifies the weekly time range for when maintenance on the cache cluster is performed. The format is `ddd:hh24:mi-ddd:hh24:mi` (24H Clock UTC). The minimum maintenance window is a 60 minute period. Example: `sun:05:00-sun:09:00`. | `string` | `""` | no |
 
 ### Tags
 
