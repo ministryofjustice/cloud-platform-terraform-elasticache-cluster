@@ -34,7 +34,7 @@ module "example_team_ec_cluster" {
 resource "kubernetes_secret" "example_team_ec_cluster" {
   metadata {
     name      = "example-team-ec-cluster-output"
-    namespace = var.namespace
+    namespace = "example-namespace"
   }
 
   data = {
