@@ -14,7 +14,9 @@ variable "cluster_name" {
  *
  */
 module "example_team_ec_cluster" {
-  source                 = "github.com/ministryofjustice/cloud-platform-terraform-elasticache-cluster?ref=4.0"
+  # always check the latest release in Github and set below
+  source                 = "../"
+  # source                 = "github.com/ministryofjustice/cloud-platform-terraform-elasticache-cluster?ref=5.2"
   cluster_name           = var.cluster_name
   team_name              = "example-repo"
   namespace              = var.namespace
