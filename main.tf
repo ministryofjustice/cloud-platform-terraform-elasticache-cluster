@@ -45,14 +45,14 @@ resource "aws_security_group" "ec" {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = [for s in data.aws_subnet.private : s.cidr_block] 
+    cidr_blocks = [for s in data.aws_subnet.private : s.cidr_block]
   }
 
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = [for s in data.aws_subnet.private : s.cidr_block] 
+    cidr_blocks = [for s in data.aws_subnet.private : s.cidr_block]
   }
 }
 
@@ -93,4 +93,3 @@ resource "aws_elasticache_subnet_group" "ec_subnet" {
   name       = "ec-sg-${random_id.id.hex}"
   subnet_ids = data.aws_subnet_ids.private.ids
 }
-
