@@ -77,6 +77,7 @@ resource "aws_elasticache_replication_group" "ec_redis" {
   transit_encryption_enabled    = true
   auth_token                    = random_id.auth_token.hex
   apply_immediately             = true
+  snapshot_window               = var.snapshot_window
   maintenance_window            = var.maintenance_window
 
   tags = {

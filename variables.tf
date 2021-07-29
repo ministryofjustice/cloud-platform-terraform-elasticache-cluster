@@ -51,6 +51,12 @@ variable "node_type" {
   default     = "cache.t2.medium"
 }
 
+variable "snapshot_window" {
+  type        = string
+  description = "The daily time range (in UTC) during which ElastiCache will begin taking a daily snapshot of your cache cluster. The minimum snapshot window is a 60 minute period. Example: 05:00-09:00"
+  default     = ""
+}
+
 variable "maintenance_window" {
   type        = string
   description = "Specifies the weekly time range for when maintenance on the cache cluster is performed. The format is `ddd:hh24:mi-ddd:hh24:mi` (24H Clock UTC). The minimum maintenance window is a 60 minute period. Example: `sun:05:00-sun:09:00`."
