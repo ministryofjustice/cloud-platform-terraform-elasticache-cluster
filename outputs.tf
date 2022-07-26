@@ -12,4 +12,3 @@ output "auth_token" {
   description = "The password used to access the Redis protected server."
   value       = aws_elasticache_replication_group.ec_redis.auth_token
 }
-
