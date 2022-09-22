@@ -4,7 +4,7 @@
  *
  */
 
-variable "cluster_name" {
+variable "vpc_name" {
 }
 
 /*
@@ -17,7 +17,7 @@ module "example_team_ec_cluster" {
   # always check the latest release in Github and set below
   source = "../"
   # source                 = "github.com/ministryofjustice/cloud-platform-terraform-elasticache-cluster?ref=5.2"
-  cluster_name           = var.cluster_name
+  vpc_name               = var.vpc_name
   team_name              = "example-repo"
   namespace              = "example-namespace"
   business-unit          = "example-bu"
