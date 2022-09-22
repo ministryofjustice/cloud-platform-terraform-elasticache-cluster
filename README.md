@@ -13,7 +13,7 @@ module "example_team_ec_cluster" {
   source = "github.com/ministryofjustice/cloud-platform-terraform-elasticache-cluster?ref=version"
 
   // The first two inputs are provided by the pipeline for cloud-platform. See the example for more detail.
-  cluster_name           = var.cluster_name
+  vpc_name               = var.vpc_name
   team_name              = "example-repo"
   business-unit          = "example-bu"
   application            = "exampleapp"
@@ -32,7 +32,7 @@ module "example_team_ec_cluster" {
 | engine_version | Redis ElastiCache engine version | string | `5.0.6` | no |
 | parameter_group_name | ElastiCache engine parameter group name| string | `default.redis5.0` | no |
 | node_type | The instance type of the EC cluster | string | `cache.m3.medium` | no |
-| cluster_name | The name of the cluster (eg.: cloud-platform-live-0) | string | - | yes |
+| vpc_name | The name of the vpc (eg.: live-1) | string | - | yes |
 | providers |  providers to use (including region) | string | - | -
 | snapshot_window | The daily time range (in UTC) during which ElastiCache will begin taking a daily snapshot of your cache cluster. The minimum snapshot window is a 60 minute period. Example: `05:00-09:00` | `string` | `""` | no |
 | maintenance_window | Specifies the weekly time range for when maintenance on the cache cluster is performed. The format is `ddd:hh24:mi-ddd:hh24:mi` (24H Clock UTC). The minimum maintenance window is a 60 minute period. Example: `sun:05:00-sun:09:00`. | `string` | `""` | no |

@@ -13,7 +13,7 @@ resource "random_id" "auth_token" {
 data "aws_vpc" "selected" {
   filter {
     name   = "tag:Name"
-    values = [var.cluster_name]
+    values = [var.vpc_name]
   }
 }
 
