@@ -17,8 +17,11 @@ data "aws_vpc" "selected" {
   }
 }
 
-data "aws_subnet_ids" "private" {
-  vpc_id = data.aws_vpc.selected.id
+data "aws_subnets" "private" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.selected.id]
+  }
 
   tags = {
     SubnetType = "Private"
@@ -26,7 +29,7 @@ data "aws_subnet_ids" "private" {
 }
 
 data "aws_subnet" "private" {
-  for_each = data.aws_subnet_ids.private.ids
+  for_each = toset(data.aws_subnets.private.ids)
   id       = each.value
 }
 
@@ -61,22 +64,22 @@ resource "aws_elasticache_replication_group" "ec_redis" {
     0,
     var.number_cache_clusters,
   )
-  replication_group_id          = "cp-${random_id.id.hex}"
-  replication_group_description = "team=${var.team_name} / app=${var.application} / env=${var.environment-name}"
-  engine                        = "redis"
-  engine_version                = var.engine_version
-  node_type                     = var.node_type
-  number_cache_clusters         = var.number_cache_clusters
-  parameter_group_name          = var.parameter_group_name
-  port                          = 6379
-  subnet_group_name             = aws_elasticache_subnet_group.ec_subnet.name
-  security_group_ids            = [aws_security_group.ec.id]
-  at_rest_encryption_enabled    = true
-  transit_encryption_enabled    = true
-  auth_token                    = random_id.auth_token.hex
-  apply_immediately             = true
-  snapshot_window               = var.snapshot_window
-  maintenance_window            = var.maintenance_window
+  replication_group_id       = "cp-${random_id.id.hex}"
+  description                = "team=${var.team_name} / app=${var.application} / env=${var.environment-name}"
+  engine                     = "redis"
+  engine_version             = var.engine_version
+  node_type                  = var.node_type
+  num_cache_clusters         = var.number_cache_clusters
+  parameter_group_name       = var.parameter_group_name
+  port                       = 6379
+  subnet_group_name          = aws_elasticache_subnet_group.ec_subnet.name
+  security_group_ids         = [aws_security_group.ec.id]
+  at_rest_encryption_enabled = true
+  transit_encryption_enabled = true
+  auth_token                 = random_id.auth_token.hex
+  apply_immediately          = true
+  snapshot_window            = var.snapshot_window
+  maintenance_window         = var.maintenance_window
 
   tags = {
     namespace              = var.namespace
@@ -91,5 +94,5 @@ resource "aws_elasticache_replication_group" "ec_redis" {
 
 resource "aws_elasticache_subnet_group" "ec_subnet" {
   name       = "ec-sg-${random_id.id.hex}"
-  subnet_ids = data.aws_subnet_ids.private.ids
+  subnet_ids = data.aws_subnets.private.ids
 }
