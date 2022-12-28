@@ -25,6 +25,8 @@ module "example_team_ec_cluster" {
   }
 }
 ```
+
+<!-- BEGIN_TF_DOCS -->
 ## Inputs
 
 | Name | Description | Type | Default | Required |
@@ -37,7 +39,17 @@ module "example_team_ec_cluster" {
 | snapshot_window | The daily time range (in UTC) during which ElastiCache will begin taking a daily snapshot of your cache cluster. The minimum snapshot window is a 60 minute period. Example: `05:00-09:00` | `string` | `""` | no |
 | maintenance_window | Specifies the weekly time range for when maintenance on the cache cluster is performed. The format is `ddd:hh24:mi-ddd:hh24:mi` (24H Clock UTC). The minimum maintenance window is a 60 minute period. Example: `sun:05:00-sun:09:00`. | `string` | `""` | no |
 
-### Tags
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| primary_endpoint_address | The address of the endpoint for the primary node in the replication group, if the cluster mode is disabled. |
+| member_clusters | The identifiers of all the nodes that are part of this replication group. |
+| auth_token | The password used to access the Redis protected server. |
+
+<!-- END_TF_DOCS -->
+
+## Tags
 
 Some of the inputs are tags. All infrastructure resources need to be tagged according to the [MOJ techincal guidence](https://ministryofjustice.github.io/technical-guidance/standards/documenting-infrastructure-owners/#documenting-owners-of-infrastructure). The tags are stored as variables that you will need to fill out as part of your module.
 
@@ -49,14 +61,6 @@ Some of the inputs are tags. All infrastructure resources need to be tagged acco
 | infrastructure-support | The team responsible for managing the infrastructure. Should be of the form team-email | string | - | yes |
 | is-production |  | string | `false` | yes |
 | team_name |  | string | - | yes |
-
-## Outputs
-
-| Name | Description |
-|------|-------------|
-| primary_endpoint_address | The address of the endpoint for the primary node in the replication group, if the cluster mode is disabled. |
-| member_clusters | The identifiers of all the nodes that are part of this replication group. |
-| auth_token | The password used to access the Redis protected server. |
 
 ## Access outside the cluster
 
