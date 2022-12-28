@@ -25,19 +25,70 @@ module "example_team_ec_cluster" {
   }
 }
 ```
+
+<!-- BEGIN_TF_DOCS -->
+## Requirements
+
+| Name | Version |
+|------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.14 |
+| <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.27.0 |
+| <a name="requirement_random"></a> [random](#requirement\_random) | >= 2.0.0 |
+
+## Providers
+
+| Name | Version |
+|------|---------|
+| <a name="provider_aws"></a> [aws](#provider\_aws) | >= 4.27.0 |
+| <a name="provider_random"></a> [random](#provider\_random) | >= 2.0.0 |
+
+## Modules
+
+No modules.
+
+## Resources
+
+| Name | Type |
+|------|------|
+| [aws_elasticache_replication_group.ec_redis](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/elasticache_replication_group) | resource |
+| [aws_elasticache_subnet_group.ec_subnet](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/elasticache_subnet_group) | resource |
+| [aws_security_group.ec](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group) | resource |
+| [random_id.auth_token](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) | resource |
+| [random_id.id](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) | resource |
+| [aws_availability_zones.available](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/availability_zones) | data source |
+| [aws_subnet.private](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/subnet) | data source |
+| [aws_subnets.private](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/subnets) | data source |
+| [aws_vpc.selected](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/vpc) | data source |
+
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|:----:|:-----:|:-----:|
-| engine_version | Redis ElastiCache engine version | string | `5.0.6` | no |
-| parameter_group_name | ElastiCache engine parameter group name| string | `default.redis5.0` | no |
-| node_type | The instance type of the EC cluster | string | `cache.m3.medium` | no |
-| vpc_name | The name of the vpc (eg.: live-1) | string | - | yes |
-| providers |  providers to use (including region) | string | - | -
-| snapshot_window | The daily time range (in UTC) during which ElastiCache will begin taking a daily snapshot of your cache cluster. The minimum snapshot window is a 60 minute period. Example: `05:00-09:00` | `string` | `""` | no |
-| maintenance_window | Specifies the weekly time range for when maintenance on the cache cluster is performed. The format is `ddd:hh24:mi-ddd:hh24:mi` (24H Clock UTC). The minimum maintenance window is a 60 minute period. Example: `sun:05:00-sun:09:00`. | `string` | `""` | no |
+|------|-------------|------|---------|:--------:|
+| <a name="input_application"></a> [application](#input\_application) | The name of your application | `string` | n/a | yes |
+| <a name="input_business-unit"></a> [business-unit](#input\_business-unit) | Area of the MOJ responsible for the service | `string` | `"mojdigital"` | no |
+| <a name="input_engine_version"></a> [engine\_version](#input\_engine\_version) | The engine version that your ElastiCache Cluster will use. This will differ between the use of 'redis' or 'memcached'. The default is '5.0.6' with redis being the assumed engine. | `string` | `"5.0.6"` | no |
+| <a name="input_environment-name"></a> [environment-name](#input\_environment-name) | The name of your environment | `string` | n/a | yes |
+| <a name="input_infrastructure-support"></a> [infrastructure-support](#input\_infrastructure-support) | The team responsible for managing the infrastructure. Should be of the form <team-name> (<team-email>) | `string` | n/a | yes |
+| <a name="input_is-production"></a> [is-production](#input\_is-production) | Whether this is a production ElastiCache cluster | `string` | `"false"` | no |
+| <a name="input_maintenance_window"></a> [maintenance\_window](#input\_maintenance\_window) | Specifies the weekly time range for when maintenance on the cache cluster is performed. The format is `ddd:hh24:mi-ddd:hh24:mi` (24H Clock UTC). The minimum maintenance window is a 60 minute period. Example: `sun:05:00-sun:09:00`. | `string` | `""` | no |
+| <a name="input_namespace"></a> [namespace](#input\_namespace) | The name of your namespace | `string` | n/a | yes |
+| <a name="input_node_type"></a> [node\_type](#input\_node\_type) | The cache node type for your cluster. The next size up is cache.m4.large | `string` | `"cache.t2.medium"` | no |
+| <a name="input_number_cache_clusters"></a> [number\_cache\_clusters](#input\_number\_cache\_clusters) | The number of cache clusters (primary and replicas) this replication group will have. Default is 2 | `string` | `"2"` | no |
+| <a name="input_parameter_group_name"></a> [parameter\_group\_name](#input\_parameter\_group\_name) | Name of the parameter group to associate with this cache cluster. Again this will differ between the use of 'redis' or 'memcached' and your engine version. The default is 'default.redis5.0'. | `string` | `"default.redis5.0"` | no |
+| <a name="input_snapshot_window"></a> [snapshot\_window](#input\_snapshot\_window) | The daily time range (in UTC) during which ElastiCache will begin taking a daily snapshot of your cache cluster. The minimum snapshot window is a 60 minute period. Example: 05:00-09:00 | `string` | `""` | no |
+| <a name="input_team_name"></a> [team\_name](#input\_team\_name) | The name of your development team | `string` | n/a | yes |
+| <a name="input_vpc_name"></a> [vpc\_name](#input\_vpc\_name) | The name of the vpc (eg.: live-1) | `string` | n/a | yes |
 
-### Tags
+## Outputs
+
+| Name | Description |
+|------|-------------|
+| <a name="output_auth_token"></a> [auth\_token](#output\_auth\_token) | The password used to access the Redis protected server. |
+| <a name="output_member_clusters"></a> [member\_clusters](#output\_member\_clusters) | The identifiers of all the nodes that are part of this replication group. |
+| <a name="output_primary_endpoint_address"></a> [primary\_endpoint\_address](#output\_primary\_endpoint\_address) | The address of the endpoint for the primary node in the replication group, if the cluster mode is disabled. |
+<!-- END_TF_DOCS -->
+
+## Tags
 
 Some of the inputs are tags. All infrastructure resources need to be tagged according to the [MOJ techincal guidence](https://ministryofjustice.github.io/technical-guidance/standards/documenting-infrastructure-owners/#documenting-owners-of-infrastructure). The tags are stored as variables that you will need to fill out as part of your module.
 
@@ -49,14 +100,6 @@ Some of the inputs are tags. All infrastructure resources need to be tagged acco
 | infrastructure-support | The team responsible for managing the infrastructure. Should be of the form team-email | string | - | yes |
 | is-production |  | string | `false` | yes |
 | team_name |  | string | - | yes |
-
-## Outputs
-
-| Name | Description |
-|------|-------------|
-| primary_endpoint_address | The address of the endpoint for the primary node in the replication group, if the cluster mode is disabled. |
-| member_clusters | The identifiers of all the nodes that are part of this replication group. |
-| auth_token | The password used to access the Redis protected server. |
 
 ## Access outside the cluster
 
