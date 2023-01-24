@@ -75,3 +75,9 @@ variable "maintenance_window" {
   description = "Specifies the weekly time range for when maintenance on the cache cluster is performed. The format is `ddd:hh24:mi-ddd:hh24:mi` (24H Clock UTC). The minimum maintenance window is a 60 minute period. Example: `sun:05:00-sun:09:00`."
   default     = ""
 }
+
+variable "auth_token_rotated_date" {
+  type        = string
+  default     = ""
+  description = "Process to spin new auth token. Pass date to regenerate new token"
+}
