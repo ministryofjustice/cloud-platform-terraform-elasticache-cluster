@@ -12,3 +12,14 @@ output "auth_token" {
   description = "The password used to access the Redis protected server."
   value       = aws_elasticache_replication_group.ec_redis.auth_token
 }
+
+
+output "access_key_id" {
+  description = "Access key id for elasticache"
+  value       = aws_iam_access_key.key.id
+}
+
+output "secret_access_key" {
+  description = "Secret key for elasticache"
+  value       = aws_iam_access_key.key.secret
+}
