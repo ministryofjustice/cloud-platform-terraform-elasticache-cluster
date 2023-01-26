@@ -8,8 +8,12 @@ resource "random_id" "id" {
 
 resource "random_id" "auth_token" {
   byte_length = 32
+  keepers = local.auth_token_rotation_seed
 }
 
+locals {
+  auth_token_rotation_seed = var.auth_token_rotated_date == "" ? {} : { "auth-token-rotated-date" = var.auth_token_rotated_date }
+}
 data "aws_vpc" "selected" {
   filter {
     name   = "tag:Name"
@@ -96,3 +100,36 @@ resource "aws_elasticache_subnet_group" "ec_subnet" {
   name       = "ec-sg-${random_id.id.hex}"
   subnet_ids = data.aws_subnets.private.ids
 }
+
+
+resource "aws_iam_user" "user" {
+  name = "cp-elasticache-${random_id.id.hex}"
+  path = "/system/elasticache-user/"
+}
+
+resource "aws_iam_access_key" "key" {
+  user = aws_iam_user.user.name
+}
+
+resource "aws_iam_user_policy" "userpol" {
+  name   = aws_iam_user.user.name
+  policy = data.aws_iam_policy_document.policy.json
+  user   = aws_iam_user.user.name
+}
+
+data "aws_iam_policy_document" "policy" {
+  statement {
+    actions = [
+        "elasticache:ModifyReplicationGroup",
+        "elasticache:DescribeReplicationGroups",
+         "elasticache:DescribeCacheClusters",
+
+    ]
+
+    resources = [
+      aws_elasticache_replication_group.ec_redis.arn,
+      "arn:aws:elasticache:eu-west-2:754256621582:cluster:${aws_elasticache_replication_group.ec_redis.id}-*",
+    ]
+  }
+}
+
