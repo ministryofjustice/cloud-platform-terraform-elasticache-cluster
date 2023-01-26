@@ -127,6 +127,15 @@ data "aws_iam_policy_document" "policy" {
       aws_elasticache_replication_group.ec_redis.arn,
     ]
   }
+  statement {
+    actions = [
+        "elasticache:DescribeCacheClusters",
+    ]
+
+    resources = [
+      aws_elasticache_replication_group.ec_redis.member_clusters,
+    ]
+  }
 
 }
 
