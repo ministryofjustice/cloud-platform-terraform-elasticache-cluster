@@ -121,21 +121,15 @@ data "aws_iam_policy_document" "policy" {
   statement {
     actions = [
         "elasticache:ModifyReplicationGroup",
+        "elasticache:DescribeReplicationGroups",
+         "elasticache:DescribeCacheClusters",
+
     ]
 
     resources = [
       aws_elasticache_replication_group.ec_redis.arn,
+      "arn:aws:elasticache:eu-west-2:754256621582:cluster:${aws_elasticache_replication_group.ec_redis.id}-*",
     ]
   }
-  statement {
-    actions = [
-        "elasticache:DescribeCacheClusters",
-    ]
-
-    resources = [
-      aws_elasticache_replication_group.ec_redis.member_clusters,
-    ]
-  }
-
 }
 
