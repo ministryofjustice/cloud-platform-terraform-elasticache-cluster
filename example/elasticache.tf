@@ -26,6 +26,9 @@ module "example_team_ec_cluster" {
   environment-name       = "development"
   infrastructure-support = "example-team@digtal.justice.gov.uk"
 
+  # Consider setting the engine to a recent version (defaults to 5.0.6)
+  engine_version = "6.x"
+
   providers = {
     aws = aws.london
   }
@@ -41,8 +44,8 @@ resource "kubernetes_secret" "example_team_ec_cluster" {
     primary_endpoint_address = module.example_team_ec_cluster.primary_endpoint_address
     member_clusters          = jsonencode(module.example_team_ec_cluster.member_clusters)
     auth_token               = module.example_team_ec_cluster.auth_token
-    access_key_id     = module.example_team_ec_cluster.access_key_id
-    secret_access_key = module.example_team_ec_cluster.secret_access_key
-    replication_group_id = module.example_team_ec_cluster.replication_group_id
+    access_key_id            = module.example_team_ec_cluster.access_key_id
+    secret_access_key        = module.example_team_ec_cluster.secret_access_key
+    replication_group_id     = module.example_team_ec_cluster.replication_group_id
   }
 }
