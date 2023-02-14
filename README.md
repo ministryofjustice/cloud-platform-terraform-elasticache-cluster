@@ -12,7 +12,7 @@ This Terraform module will create an ElastiCache Redis Cluster Replication Group
 module "example_team_ec_cluster" {
   source = "github.com/ministryofjustice/cloud-platform-terraform-elasticache-cluster?ref=version"
 
-  // The first two inputs are provided by the pipeline for cloud-platform. See the example for more detail.
+  # The first two inputs are provided by the pipeline for cloud-platform. See the example for more detail.
   vpc_name               = var.vpc_name
   team_name              = "example-repo"
   business-unit          = "example-bu"
