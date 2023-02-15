@@ -31,7 +31,7 @@ module "example_team_ec_cluster" {
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 0.14 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.2.5 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 4.27.0 |
 | <a name="requirement_random"></a> [random](#requirement\_random) | >= 2.0.0 |
 
