@@ -1,3 +1,18 @@
+locals {
+  default_tags = {
+    # Mandatory
+    business-unit = var.business-unit
+    application   = var.application
+    is-production = var.is-production
+    owner         = var.team_name
+    namespace     = var.namespace # for billing and identification purposes
+
+    # Optional
+    environment-name       = var.environment-name
+    infrastructure-support = var.infrastructure-support
+  }
+}
+
 data "aws_availability_zones" "available" {
   state = "available"
 }
@@ -59,6 +74,8 @@ resource "aws_security_group" "ec" {
     protocol    = "-1"
     cidr_blocks = [for s in data.aws_subnet.private : s.cidr_block]
   }
+
+  tags = local.default_tags
 }
 
 resource "aws_elasticache_replication_group" "ec_redis" {
@@ -85,26 +102,21 @@ resource "aws_elasticache_replication_group" "ec_redis" {
   snapshot_window            = var.snapshot_window
   maintenance_window         = var.maintenance_window
 
-  tags = {
-    namespace              = var.namespace
-    business-unit          = var.business-unit
-    application            = var.application
-    is-production          = var.is-production
-    environment-name       = var.environment-name
-    owner                  = var.team_name
-    infrastructure-support = var.infrastructure-support
-  }
+  tags = local.default_tags
 }
 
 resource "aws_elasticache_subnet_group" "ec_subnet" {
   name       = "ec-sg-${random_id.id.hex}"
   subnet_ids = data.aws_subnets.private.ids
-}
 
+  tags = local.default_tags
+}
 
 resource "aws_iam_user" "user" {
   name = "cp-elasticache-${random_id.id.hex}"
   path = "/system/elasticache-user/"
+
+  tags = local.default_tags
 }
 
 resource "aws_iam_access_key" "key" {

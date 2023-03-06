@@ -20,7 +20,6 @@ variable "environment-name" {
 
 variable "is-production" {
   description = "Whether this is a production ElastiCache cluster"
-  default     = "false"
   type        = string
 }
 
@@ -31,7 +30,6 @@ variable "namespace" {
 
 variable "business-unit" {
   description = "Area of the MOJ responsible for the service"
-  default     = "mojdigital"
   type        = string
 }
 
