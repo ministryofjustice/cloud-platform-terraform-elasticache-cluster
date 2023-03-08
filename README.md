@@ -70,11 +70,11 @@ No modules.
 |------|-------------|------|---------|:--------:|
 | <a name="input_application"></a> [application](#input\_application) | The name of your application | `string` | n/a | yes |
 | <a name="input_auth_token_rotated_date"></a> [auth\_token\_rotated\_date](#input\_auth\_token\_rotated\_date) | Process to spin new auth token. Pass date to regenerate new token | `string` | `""` | no |
-| <a name="input_business-unit"></a> [business-unit](#input\_business-unit) | Area of the MOJ responsible for the service | `string` | `"mojdigital"` | no |
+| <a name="input_business-unit"></a> [business-unit](#input\_business-unit) | Area of the MOJ responsible for the service | `string` | n/a | yes |
 | <a name="input_engine_version"></a> [engine\_version](#input\_engine\_version) | The engine version that your ElastiCache Cluster will use. This will differ between the use of 'redis' or 'memcached'. The default is '5.0.6' with redis being the assumed engine. | `string` | `"5.0.6"` | no |
 | <a name="input_environment-name"></a> [environment-name](#input\_environment-name) | The name of your environment | `string` | n/a | yes |
 | <a name="input_infrastructure-support"></a> [infrastructure-support](#input\_infrastructure-support) | The team responsible for managing the infrastructure. Should be of the form <team-name> (<team-email>) | `string` | n/a | yes |
-| <a name="input_is-production"></a> [is-production](#input\_is-production) | Whether this is a production ElastiCache cluster | `string` | `"false"` | no |
+| <a name="input_is-production"></a> [is-production](#input\_is-production) | Whether this is a production ElastiCache cluster | `string` | n/a | yes |
 | <a name="input_maintenance_window"></a> [maintenance\_window](#input\_maintenance\_window) | Specifies the weekly time range for when maintenance on the cache cluster is performed. The format is `ddd:hh24:mi-ddd:hh24:mi` (24H Clock UTC). The minimum maintenance window is a 60 minute period. Example: `sun:05:00-sun:09:00`. | `string` | `""` | no |
 | <a name="input_namespace"></a> [namespace](#input\_namespace) | The name of your namespace | `string` | n/a | yes |
 | <a name="input_node_type"></a> [node\_type](#input\_node\_type) | The cache node type for your cluster. The next size up is cache.m4.large | `string` | `"cache.t2.medium"` | no |
