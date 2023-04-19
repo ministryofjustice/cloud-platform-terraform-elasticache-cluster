@@ -1,13 +1,4 @@
 /*
- * When using this module through the cloud-platform-environments, the following
- * two variables are automatically supplied by the pipeline.
- *
- */
-
-variable "vpc_name" {
-}
-
-/*
  * Make sure that you use the latest version of the module by changing the
  * `ref=` value in the `source` attribute to the latest version listed on the
  * releases page of this repository.
@@ -16,22 +7,24 @@ variable "vpc_name" {
 module "example_team_ec_cluster" {
   # always check the latest release in Github and set below
   source = "../"
-  # source                 = "github.com/ministryofjustice/cloud-platform-terraform-elasticache-cluster?ref=5.5"
-  vpc_name               = var.vpc_name
-  team_name              = "example-repo"
-  namespace              = "example-namespace"
-  business-unit          = "example-bu"
-  application            = "exampleapp"
-  is-production          = "false"
-  environment-name       = "development"
-  infrastructure-support = "example-team@digtal.justice.gov.uk"
+  # source = "github.com/ministryofjustice/cloud-platform-terraform-elasticache-cluster?ref=5.5"
 
-  # Consider setting the engine to a recent version (defaults to 5.0.6)
-  engine_version = "6.x"
+  # VPC configuration
+  vpc_name = var.vpc_name
 
-  providers = {
-    aws = aws.london
-  }
+  # Redis configuration
+  engine_version       = "7.0"
+  parameter_group_name = "default.redis7"
+  node_type            = "cache.t4g.micro"
+
+  # Tags
+  team_name              = var.team_name
+  namespace              = var.namespace
+  business-unit          = var.business-unit
+  application            = var.application
+  is-production          = var.is-production
+  environment-name       = var.environment-name
+  infrastructure-support = var.infrastructure-support
 }
 
 resource "kubernetes_secret" "example_team_ec_cluster" {
