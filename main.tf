@@ -125,7 +125,6 @@ resource "aws_elasticache_replication_group" "ec_redis" {
   security_group_ids         = [aws_security_group.ec.id]
   at_rest_encryption_enabled = true
   transit_encryption_enabled = true
-  auth_token                 = aws_elasticache_user.ec_user.auth_token
   user_group_ids             = aws_elasticache_user_group.ec_group.user_group_id
   apply_immediately          = true
   snapshot_window            = var.snapshot_window
