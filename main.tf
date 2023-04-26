@@ -81,8 +81,8 @@ resource "aws_security_group" "ec" {
 
 // User and group for Redis Auth
 resource "aws_elasticache_user" "ec_user" {
-  user_id       = var.team_name + "-" + var.environment-name + "-ID"
-  user_name     = var.team_name + "-" + var.environment-name
+  user_id       = "${var.team_name}-${var.environment-name}-ID"
+  user_name     = "${var.team_name}-${var.environment-name}"
   access_string = "off ~keys* -@all +get"
   engine        = "REDIS"
 
@@ -93,7 +93,7 @@ resource "aws_elasticache_user" "ec_user" {
 
 resource "aws_elasticache_user_group" "ec_group" {
   engine        = "REDIS"
-  user_group_id = var.team_name + "-" + var.environment-name + "-ID"
+  user_group_id ="${var.team_name}-${var.environment-name}-ID"
   user_ids      = [aws_elasticache_user.default.user_id]
 
   lifecycle {
