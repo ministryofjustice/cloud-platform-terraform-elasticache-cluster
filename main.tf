@@ -81,7 +81,7 @@ resource "aws_security_group" "ec" {
 
 // User and group for Redis Auth
 resource "aws_elasticache_user" "ec_user" {
-  user_id       = "${var.team_name}-${var.environment-name}-ID"
+  user_id       = "${var.team_name}-${var.environment-name}"
   user_name     = "${var.team_name}-${var.environment-name}"
   access_string = "off ~keys* -@all +get"
   engine        = "REDIS"
@@ -93,8 +93,8 @@ resource "aws_elasticache_user" "ec_user" {
 
 resource "aws_elasticache_user_group" "ec_group" {
   engine        = "REDIS"
-  user_group_id ="${var.team_name}-${var.environment-name}-ID"
-  user_ids      = [aws_elasticache_user.ec_user.user_id]
+  user_group_id = "${var.team_name}-${var.environment-name}"
+  user_ids      = [data.aws_elasticache_user.default_user.user_id, aws_elasticache_user.ec_user.user_id]
 
   lifecycle {
     ignore_changes = [user_ids]
@@ -125,7 +125,7 @@ resource "aws_elasticache_replication_group" "ec_redis" {
   security_group_ids         = [aws_security_group.ec.id]
   at_rest_encryption_enabled = true
   transit_encryption_enabled = true
-  user_group_ids             = aws_elasticache_user_group.ec_group.user_group_id
+  user_group_ids             = [aws_elasticache_user_group.ec_group.user_group_id]
   apply_immediately          = true
   snapshot_window            = var.snapshot_window
   maintenance_window         = var.maintenance_window
@@ -173,3 +173,6 @@ data "aws_iam_policy_document" "policy" {
   }
 }
 
+data "aws_elasticache_user" "default_user" {
+  user_id = "default"
+}
