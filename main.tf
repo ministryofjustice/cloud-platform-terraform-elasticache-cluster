@@ -94,7 +94,7 @@ resource "aws_elasticache_user" "ec_user" {
 resource "aws_elasticache_user_group" "ec_group" {
   engine        = "REDIS"
   user_group_id ="${var.team_name}-${var.environment-name}-ID"
-  user_ids      = [aws_elasticache_user.default.user_id]
+  user_ids      = [aws_elasticache_user.ec_user.user_id]
 
   lifecycle {
     ignore_changes = [user_ids]
