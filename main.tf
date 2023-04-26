@@ -101,11 +101,6 @@ resource "aws_elasticache_user_group" "ec_group" {
   }
 }
 
-resource "aws_elasticache_user_group_association" "ec_group_association" {
-  user_group_id = aws_elasticache_user_group.ec_group.user_group_id
-  user_id       = aws_elasticache_user.ec_user.user_id
-}
-
 resource "aws_elasticache_replication_group" "ec_redis" {
   automatic_failover_enabled = true
   availability_zones = slice(
