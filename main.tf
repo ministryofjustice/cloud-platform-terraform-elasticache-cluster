@@ -21,10 +21,10 @@ resource "random_id" "id" {
   byte_length = 8
 }
 
-resource "random_id" "auth_token" {
-  byte_length = 32
-  keepers     = local.auth_token_rotation_seed
-}
+# resource "random_id" "auth_token" {
+#   byte_length = 32
+#   keepers     = local.auth_token_rotation_seed
+# }
 
 locals {
   auth_token_rotation_seed = var.auth_token_rotated_date == "" ? {} : { "auth-token-rotated-date" = var.auth_token_rotated_date }
@@ -79,6 +79,33 @@ resource "aws_security_group" "ec" {
   tags = local.default_tags
 }
 
+// User and group for Redis Auth
+resource "aws_elasticache_user" "ec_user" {
+  user_id       = var.team_name + "-" + var.environment + "-ID"
+  user_name     = var.team_name + "-" + var.environment
+  access_string = "off ~keys* -@all +get"
+  engine        = "REDIS"
+
+  authentication_mode {
+    type = "no-password-required"
+  }
+}
+
+resource "aws_elasticache_user_group" "ec_group" {
+  engine        = "REDIS"
+  user_group_id = var.team_name + "-" + var.environment + "-ID"
+  user_ids      = [aws_elasticache_user.default.user_id]
+
+  lifecycle {
+    ignore_changes = [user_ids]
+  }
+}
+
+resource "aws_elasticache_user_group_association" "ec_group_association" {
+  user_group_id = aws_elasticache_user_group.ec_group.user_group_id
+  user_id       = aws_elasticache_user.ec_user.user_id
+}
+
 resource "aws_elasticache_replication_group" "ec_redis" {
   automatic_failover_enabled = true
   availability_zones = slice(
@@ -98,7 +125,8 @@ resource "aws_elasticache_replication_group" "ec_redis" {
   security_group_ids         = [aws_security_group.ec.id]
   at_rest_encryption_enabled = true
   transit_encryption_enabled = true
-  auth_token                 = random_id.auth_token.hex
+  auth_token                 = aws_elasticache_user.ec_user.auth_token
+  user_group_ids             = aws_elasticache_user_group.ec_group.user_group_id
   apply_immediately          = true
   snapshot_window            = var.snapshot_window
   maintenance_window         = var.maintenance_window
