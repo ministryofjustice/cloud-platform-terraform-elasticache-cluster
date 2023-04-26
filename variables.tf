@@ -74,8 +74,8 @@ variable "maintenance_window" {
   default     = ""
 }
 
-variable "auth_token_rotated_date" {
-  type        = string
-  default     = ""
-  description = "Process to spin new auth token. Pass date to regenerate new token"
-}
+# variable "auth_token_rotated_date" {
+#   type        = string
+#   default     = ""
+#   description = "Process to spin new auth token. Pass date to regenerate new token"
+# }

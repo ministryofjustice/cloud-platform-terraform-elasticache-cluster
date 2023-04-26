@@ -26,9 +26,9 @@ resource "random_id" "id" {
 #   keepers     = local.auth_token_rotation_seed
 # }
 
-locals {
-  auth_token_rotation_seed = var.auth_token_rotated_date == "" ? {} : { "auth-token-rotated-date" = var.auth_token_rotated_date }
-}
+# locals {
+#   auth_token_rotation_seed = var.auth_token_rotated_date == "" ? {} : { "auth-token-rotated-date" = var.auth_token_rotated_date }
+# }
 
 data "aws_vpc" "selected" {
   filter {
