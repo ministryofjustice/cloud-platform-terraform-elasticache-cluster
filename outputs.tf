@@ -28,3 +28,7 @@ output "replication_group_id" {
   value       = aws_elasticache_replication_group.ec_redis.replication_group_id
   description = "Redis cluster ID"
 }
+
+output "irsa_policy_arn" {
+  value = aws_iam_policy.irsa.arn
+}
