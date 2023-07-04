@@ -1,30 +1,36 @@
 # cloud-platform-terraform-elasticache-cluster
 
-<a href="https://github.com/ministryofjustice/cloud-platform-terraform-elasticache-cluster/releases">
-  <img src="https://img.shields.io/github/release/ministryofjustice/cloud-platform-terraform-elasticache-cluster/all.svg" alt="Releases" />
-</a>
+[![Releases](https://img.shields.io/github/release/ministryofjustice/cloud-platform-terraform-elasticache-cluster/all.svg?style=flat-square)](https://github.com/ministryofjustice/cloud-platform-terraform-elasticache-cluster/releases)
 
-This Terraform module will create an ElastiCache Redis Cluster Replication Group in AWS. The module is built for the Redis engine. This module **does not** support Memcached.
+This Terraform module will create an [Amazon ElastiCache for Redis](https://aws.amazon.com/elasticache/) cluster for use on the Cloud Platform.
 
 ## Usage
 
 ```hcl
-module "example_team_ec_cluster" {
-  source = "github.com/ministryofjustice/cloud-platform-terraform-elasticache-cluster?ref=version"
+module "redis" {
+  source = "github.com/ministryofjustice/cloud-platform-terraform-elasticache-cluster?ref=version" # use the latest release
 
-  # The first two inputs are provided by the pipeline for cloud-platform. See the example for more detail.
-  vpc_name               = var.vpc_name
-  team_name              = "example-repo"
-  business-unit          = "example-bu"
-  application            = "exampleapp"
-  is-production          = "false"
-  environment-name       = "development"
-  infrastructure-support = "example-team@digtal.justice.gov.uk"
-  providers = {
-    aws = aws.london
-  }
+  # VPC configuration
+  vpc_name = var.vpc_name
+
+  # Redis cluster configuration
+  node_type               = "cache.t4g.micro"
+  engine_version          = "7.0"
+  parameter_group_name    = "default.redis7"
+  auth_token_rotated_date = "2023-07-04"
+
+  # Tags
+  business_unit          = var.business_unit
+  application            = var.application
+  is_production          = var.is_production
+  team_name              = var.team_name
+  namespace              = var.namespace
+  environment_name       = var.environment
+  infrastructure_support = var.infrastructure_support
 }
 ```
+
+See the [examples/](examples/) folder for more information.
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
@@ -94,7 +100,7 @@ No modules.
 |------|-------------|
 | <a name="output_access_key_id"></a> [access\_key\_id](#output\_access\_key\_id) | Access key id for elasticache |
 | <a name="output_auth_token"></a> [auth\_token](#output\_auth\_token) | The password used to access the Redis protected server. |
-| <a name="output_irsa_policy_arn"></a> [irsa\_policy\_arn](#output\_irsa\_policy\_arn) | n/a |
+| <a name="output_irsa_policy_arn"></a> [irsa\_policy\_arn](#output\_irsa\_policy\_arn) | IAM role ARN for use with IRSA |
 | <a name="output_member_clusters"></a> [member\_clusters](#output\_member\_clusters) | The identifiers of all the nodes that are part of this replication group. |
 | <a name="output_primary_endpoint_address"></a> [primary\_endpoint\_address](#output\_primary\_endpoint\_address) | The address of the endpoint for the primary node in the replication group, if the cluster mode is disabled. |
 | <a name="output_replication_group_id"></a> [replication\_group\_id](#output\_replication\_group\_id) | Redis cluster ID |
@@ -103,17 +109,16 @@ No modules.
 
 ## Tags
 
-Some of the inputs are tags. All infrastructure resources need to be tagged according to the [MOJ techincal guidence](https://ministryofjustice.github.io/technical-guidance/standards/documenting-infrastructure-owners/#documenting-owners-of-infrastructure). The tags are stored as variables that you will need to fill out as part of your module.
+Some of the inputs for this module are tags. All infrastructure resources must be tagged to meet the MOJ Technical Guidance on [Documenting owners of infrastructure](https://technical-guidance.service.justice.gov.uk/documentation/standards/documenting-infrastructure-owners.html).
 
-| Name | Description | Type | Default | Required |
-|------|-------------|:----:|:-----:|:-----:|
-| application |  | string | - | yes |
-| business-unit | Area of the MOJ responsible for the service | string | `mojdigital` | yes |
-| environment-name |  | string | - | yes |
-| infrastructure-support | The team responsible for managing the infrastructure. Should be of the form team-email | string | - | yes |
-| is-production |  | string | `false` | yes |
-| team_name |  | string | - | yes |
+You should use your namespace variables to populate these. See the [Usage](#usage) section for more information.
 
+## Reading Material
+
+- [Cloud Platform user guide](https://user-guide.cloud-platform.service.justice.gov.uk/#cloud-platform-user-guide)
+- [Amazon ElastiCache for Redis user guide](https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/WhatIs.html)
+
+<!-- TODO: Move the below to a user guide -->
 ## Access outside the cluster
 
 Your redis instance is reachable only from inside the cluster VPC, but you can use the same technique to access it from your development environment as for [accessing an RDS instance](https://user-guide.cloud-platform.service.justice.gov.uk/documentation/other-topics/rds-external-access.html#accessing-your-rds-database)
