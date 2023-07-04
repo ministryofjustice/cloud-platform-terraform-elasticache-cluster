@@ -5,15 +5,15 @@ locals {
   # Tags
   default_tags = {
     # Mandatory
-    business-unit = var.business-unit
+    business-unit = var.business_unit
     application   = var.application
-    is-production = var.is-production
+    is-production = var.is_production
     owner         = var.team_name
     namespace     = var.namespace # for billing and identification purposes
 
     # Optional
-    environment-name       = var.environment-name
-    infrastructure-support = var.infrastructure-support
+    environment-name       = var.environment_name
+    infrastructure-support = var.infrastructure_support
   }
 }
 
@@ -99,7 +99,7 @@ resource "aws_elasticache_replication_group" "ec_redis" {
     var.number_cache_clusters,
   )
   replication_group_id       = "cp-${random_id.id.hex}"
-  description                = "team=${var.team_name} / app=${var.application} / env=${var.environment-name}"
+  description                = "team=${var.team_name} / app=${var.application} / env=${var.environment_name}"
   engine                     = "redis"
   engine_version             = var.engine_version
   node_type                  = var.node_type
