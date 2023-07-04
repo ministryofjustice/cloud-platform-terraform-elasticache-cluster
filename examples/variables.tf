@@ -13,12 +13,12 @@ variable "application" {
   type        = string
 }
 
-variable "environment-name" {
+variable "environment_name" {
   description = "The name of your environment"
   type        = string
 }
 
-variable "is-production" {
+variable "is_production" {
   description = "Whether this is a production ElastiCache cluster"
   type        = string
 }
@@ -28,12 +28,12 @@ variable "namespace" {
   type        = string
 }
 
-variable "business-unit" {
+variable "business_unit" {
   description = "Area of the MOJ responsible for the service"
   type        = string
 }
 
-variable "infrastructure-support" {
+variable "infrastructure_support" {
   description = "The team responsible for managing the infrastructure. Should be of the form <team-name> (<team-email>)"
   type        = string
 }

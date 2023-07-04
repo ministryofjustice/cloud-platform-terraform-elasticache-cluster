@@ -20,11 +20,11 @@ module "example_team_ec_cluster" {
   # Tags
   team_name              = var.team_name
   namespace              = var.namespace
-  business-unit          = var.business-unit
+  business_unit          = var.business_unit
   application            = var.application
-  is-production          = var.is-production
-  environment-name       = var.environment-name
-  infrastructure-support = var.infrastructure-support
+  is_production          = var.is_production
+  environment_name       = var.environment_name
+  infrastructure_support = var.infrastructure_support
 }
 
 resource "kubernetes_secret" "example_team_ec_cluster" {
