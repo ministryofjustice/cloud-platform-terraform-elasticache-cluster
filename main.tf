@@ -155,7 +155,7 @@ data "aws_iam_policy_document" "policy" {
 
     resources = [
       aws_elasticache_replication_group.ec_redis.arn,
-      "arn:aws:elasticache:eu-west-2:${data.aws_region.current.name}:cluster:${aws_elasticache_replication_group.ec_redis.id}-*",
+      "arn:aws:elasticache:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:cluster:${aws_elasticache_replication_group.ec_redis.id}-*",
     ]
   }
 }
