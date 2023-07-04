@@ -13,7 +13,6 @@ output "auth_token" {
   value       = aws_elasticache_replication_group.ec_redis.auth_token
 }
 
-
 output "access_key_id" {
   description = "Access key id for elasticache"
   value       = aws_iam_access_key.key.id
