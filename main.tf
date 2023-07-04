@@ -1,4 +1,8 @@
 locals {
+  # Generic configuration
+  auth_token_rotation_seed = var.auth_token_rotated_date == "" ? {} : { "auth-token-rotated-date" = var.auth_token_rotated_date }
+
+  # Tags
   default_tags = {
     # Mandatory
     business-unit = var.business-unit
@@ -13,10 +17,9 @@ locals {
   }
 }
 
-data "aws_availability_zones" "available" {
-  state = "available"
-}
-
+########################
+# Generate identifiers #
+########################
 resource "random_id" "id" {
   byte_length = 8
 }
@@ -26,10 +29,9 @@ resource "random_id" "auth_token" {
   keepers     = local.auth_token_rotation_seed
 }
 
-locals {
-  auth_token_rotation_seed = var.auth_token_rotated_date == "" ? {} : { "auth-token-rotated-date" = var.auth_token_rotated_date }
-}
-
+#######################
+# Get VPC information #
+#######################
 data "aws_vpc" "selected" {
   filter {
     name   = "tag:Name"
@@ -53,6 +55,13 @@ data "aws_subnet" "private" {
   id       = each.value
 }
 
+data "aws_availability_zones" "available" {
+  state = "available"
+}
+
+##########################
+# Create Security Groups #
+##########################
 resource "aws_security_group" "ec" {
   name        = "cp-${random_id.id.hex}"
   description = "Allow inbound traffic from kubernetes private subnets"
@@ -79,6 +88,9 @@ resource "aws_security_group" "ec" {
   tags = local.default_tags
 }
 
+##############################
+# Create ElastiCache cluster #
+##############################
 resource "aws_elasticache_replication_group" "ec_redis" {
   automatic_failover_enabled = true
   availability_zones = slice(
@@ -113,7 +125,9 @@ resource "aws_elasticache_subnet_group" "ec_subnet" {
   tags = local.default_tags
 }
 
-# Legacy long-lived credentials
+#################################
+# Legacy long-lived credentials #
+#################################
 resource "aws_iam_user" "user" {
   name = "cp-elasticache-${random_id.id.hex}"
   path = "/system/elasticache-user/"
@@ -141,12 +155,14 @@ data "aws_iam_policy_document" "policy" {
 
     resources = [
       aws_elasticache_replication_group.ec_redis.arn,
-      "arn:aws:elasticache:eu-west-2:754256621582:cluster:${aws_elasticache_replication_group.ec_redis.id}-*",
+      "arn:aws:elasticache:eu-west-2:${data.aws_region.current.name}:cluster:${aws_elasticache_replication_group.ec_redis.id}-*",
     ]
   }
 }
 
-# Short-lived credentials (IRSA)
+##################################
+# Short-lived (IRSA) credentials #
+##################################
 data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
