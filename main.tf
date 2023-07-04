@@ -92,28 +92,25 @@ resource "aws_security_group" "ec" {
 # Create ElastiCache cluster #
 ##############################
 resource "aws_elasticache_replication_group" "ec_redis" {
-  automatic_failover_enabled = true
-  availability_zones = slice(
-    data.aws_availability_zones.available.names,
-    0,
-    var.number_cache_clusters,
-  )
-  replication_group_id       = "cp-${random_id.id.hex}"
-  description                = "team=${var.team_name} / app=${var.application} / env=${var.environment_name}"
-  engine                     = "redis"
-  engine_version             = var.engine_version
-  node_type                  = var.node_type
-  num_cache_clusters         = var.number_cache_clusters
-  parameter_group_name       = var.parameter_group_name
-  port                       = 6379
-  subnet_group_name          = aws_elasticache_subnet_group.ec_subnet.name
-  security_group_ids         = [aws_security_group.ec.id]
-  at_rest_encryption_enabled = true
-  transit_encryption_enabled = true
-  auth_token                 = random_id.auth_token.hex
-  apply_immediately          = true
-  snapshot_window            = var.snapshot_window
-  maintenance_window         = var.maintenance_window
+  automatic_failover_enabled  = true
+  preferred_cache_cluster_azs = slice(data.aws_availability_zones.available.names, 0, var.number_cache_clusters)
+  replication_group_id        = "cp-${random_id.id.hex}"
+  description                 = "team=${var.team_name} / app=${var.application} / env=${var.environment_name}"
+  engine                      = "redis"
+  engine_version              = var.engine_version
+  node_type                   = var.node_type
+  num_cache_clusters          = var.number_cache_clusters
+  parameter_group_name        = var.parameter_group_name
+  port                        = 6379
+  subnet_group_name           = aws_elasticache_subnet_group.ec_subnet.name
+  security_group_ids          = [aws_security_group.ec.id]
+  at_rest_encryption_enabled  = true
+  transit_encryption_enabled  = true
+  auth_token                  = random_id.auth_token.hex
+  apply_immediately           = true
+  snapshot_window             = var.snapshot_window
+  maintenance_window          = var.maintenance_window
+  auto_minor_version_upgrade  = true
 
   tags = local.default_tags
 }
