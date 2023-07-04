@@ -1,44 +1,36 @@
-/*
- * Make sure that you use the latest version of the module by changing the
- * `ref=` value in the `source` attribute to the latest version listed on the
- * releases page of this repository.
- *
- */
-module "example_team_ec_cluster" {
-  # always check the latest release in Github and set below
+module "redis" {
+  # source = "github.com/ministryofjustice/cloud-platform-terraform-elasticache-cluster?ref=version" # use the latest release
   source = "../"
-  # source = "github.com/ministryofjustice/cloud-platform-terraform-elasticache-cluster?ref=5.5"
 
   # VPC configuration
   vpc_name = var.vpc_name
 
-  # Redis configuration
-  engine_version       = "7.0"
-  parameter_group_name = "default.redis7"
-  node_type            = "cache.t4g.micro"
+  # Redis cluster configuration
+  node_type               = "cache.t4g.micro"
+  engine_version          = "7.0"
+  parameter_group_name    = "default.redis7"
+  auth_token_rotated_date = "2023-07-04"
 
   # Tags
-  team_name              = var.team_name
-  namespace              = var.namespace
   business_unit          = var.business_unit
   application            = var.application
   is_production          = var.is_production
-  environment_name       = var.environment_name
+  team_name              = var.team_name
+  namespace              = var.namespace
+  environment_name       = var.environment
   infrastructure_support = var.infrastructure_support
 }
 
-resource "kubernetes_secret" "example_team_ec_cluster" {
+resource "kubernetes_secret" "redis_secrets" {
   metadata {
     name      = "example-team-ec-cluster-output"
-    namespace = "example-namespace"
+    namespace = var.namespace
   }
 
   data = {
-    primary_endpoint_address = module.example_team_ec_cluster.primary_endpoint_address
-    member_clusters          = jsonencode(module.example_team_ec_cluster.member_clusters)
-    auth_token               = module.example_team_ec_cluster.auth_token
-    access_key_id            = module.example_team_ec_cluster.access_key_id
-    secret_access_key        = module.example_team_ec_cluster.secret_access_key
-    replication_group_id     = module.example_team_ec_cluster.replication_group_id
+    primary_endpoint_address = module.redis.primary_endpoint_address
+    member_clusters          = jsonencode(module.redis.member_clusters)
+    auth_token               = module.redis.auth_token
+    replication_group_id     = module.redis.replication_group_id
   }
 }

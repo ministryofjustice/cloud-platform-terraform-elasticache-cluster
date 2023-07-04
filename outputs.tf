@@ -29,5 +29,6 @@ output "replication_group_id" {
 }
 
 output "irsa_policy_arn" {
-  value = aws_iam_policy.irsa.arn
+  description = "IAM role ARN for use with IRSA"
+  value       = aws_iam_policy.irsa.arn
 }
