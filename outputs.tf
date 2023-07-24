@@ -13,22 +13,12 @@ output "auth_token" {
   value       = aws_elasticache_replication_group.ec_redis.auth_token
 }
 
-output "access_key_id" {
-  description = "Access key id for elasticache"
-  value       = aws_iam_access_key.key.id
-}
-
-output "secret_access_key" {
-  description = "Secret key for elasticache"
-  value       = aws_iam_access_key.key.secret
-}
-
 output "replication_group_id" {
   value       = aws_elasticache_replication_group.ec_redis.replication_group_id
   description = "Redis cluster ID"
 }
 
 output "irsa_policy_arn" {
-  description = "IAM role ARN for use with IRSA"
+  description = "IAM policy ARN for access to rotate the Redis AUTH token"
   value       = aws_iam_policy.irsa.arn
 }
