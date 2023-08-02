@@ -93,11 +93,11 @@ resource "aws_security_group" "ec" {
 ##############################
 resource "aws_elasticache_replication_group" "ec_redis" {
   automatic_failover_enabled = true
-  availability_zones = slice(
-    data.aws_availability_zones.available.names,
-    0,
-    var.number_cache_clusters,
-  )
+  # availability_zones = slice(
+  #   data.aws_availability_zones.available.names,
+  #   0,
+  #   var.number_cache_clusters,
+  # )
   replication_group_id       = "cp-${random_id.id.hex}"
   description                = "team=${var.team_name} / app=${var.application} / env=${var.environment_name}"
   engine                     = "redis"
