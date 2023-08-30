@@ -169,7 +169,7 @@ data "aws_region" "current" {}
 data "aws_iam_policy_document" "irsa" {
   version = "2012-10-17"
   statement {
-    sid    = "AllowRotateRedisAUTHToken"
+    sid    = "AllowRotateRedisAUTHTokenFor${random_id.id.hex}"
     effect = "Allow"
     actions = [
       "elasticache:ModifyReplicationGroup",
