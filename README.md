@@ -1,8 +1,8 @@
 # cloud-platform-terraform-elasticache-cluster
 
-[![Releases](https://img.shields.io/github/release/ministryofjustice/cloud-platform-terraform-elasticache-cluster/all.svg?style=flat-square)](https://github.com/ministryofjustice/cloud-platform-terraform-elasticache-cluster/releases)
+[![Releases](https://img.shields.io/github/v/release/ministryofjustice/cloud-platform-terraform-elasticache-cluster.svg)](https://github.com/ministryofjustice/cloud-platform-terraform-elasticache-cluster/releases)
 
-This Terraform module will create an [Amazon ElastiCache for Redis](https://aws.amazon.com/elasticache/) cluster for use on the Cloud Platform.
+This Terraform module will create an [Amazon ElastiCache for Redis](https://aws.amazon.com/elasticache/redis/) cluster for use on the Cloud Platform.
 
 ## Usage
 
@@ -17,7 +17,7 @@ module "redis" {
   node_type               = "cache.t4g.micro"
   engine_version          = "7.0"
   parameter_group_name    = "default.redis7"
-  auth_token_rotated_date = "2023-07-04"
+  auth_token_rotated_date = "2023-08-30"
 
   # Tags
   business_unit          = var.business_unit
@@ -31,6 +31,64 @@ module "redis" {
 ```
 
 See the [examples/](examples/) folder for more information.
+
+<!-- TODO: Move the below to a user guide -->
+### Access outside the cluster
+
+Your redis instance is reachable only from inside the cluster VPC, but you can use the same technique to access it from your development environment as for [accessing an RDS instance](https://user-guide.cloud-platform.service.justice.gov.uk/documentation/other-topics/rds-external-access.html#accessing-your-rds-database)
+
+1. Run a port-forward pod
+
+```
+kubectl \
+  -n [your namespace] \
+  run port-forward-pod \
+  --generator=run-pod/v1 \
+  --image=ministryofjustice/port-forward \
+  --port=6379 \
+  --env="REMOTE_HOST=[your redis cluster hostname]" \
+  --env="LOCAL_PORT=6379" \
+  --env="REMOTE_PORT=6379"
+```
+
+2. Forward local traffic to the port-forward-pod
+
+```
+kubectl \
+  -n [your namespace] \
+  port-forward \
+  port-forward-pod 6379:6379
+```
+
+You need to leave this running as long as you are accessing the redis cluster.
+
+3. Use the ruby redis client to access redis
+
+> At the time of writing, the `redis-cli` command-line tool cannot use encrypted redis connections (i.e. those with a URL starting `rediss://...` as opposed to `redis://...`). So, this section describes how to use the `redis` ruby gem to connect to your elasticache cluster.
+
+```
+export REDIS_URL=[modified URL from namespace secret]
+```
+
+The value here should be the redis URL from your namespace secret, but with the hostname replaced with `localhost`
+
+For instance, if the redis URL in your namespace secret is this:
+
+```
+url: rediss://dummyuser:6a36be5513564382b436b36be55e15a5@master.cp-8f56be55d06be5548.iwfvzo.euw2.cache.amazonaws.com:6379
+```
+
+...then the value you need for `REDIS_URL` is:
+
+```
+rediss://dummyuser:6a36be5513564382b436b36be55e15a5@localhost:6379
+```
+
+Then you can use the ruby redis client like this:
+
+```
+ruby -r redis -e 'redis = Redis.new(uri: ENV.fetch("REDIS_URL")); redis.set("foo", 123); puts redis.get("foo")'
+```
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
@@ -100,7 +158,7 @@ No modules.
 |------|-------------|
 | <a name="output_access_key_id"></a> [access\_key\_id](#output\_access\_key\_id) | Access key id for elasticache |
 | <a name="output_auth_token"></a> [auth\_token](#output\_auth\_token) | The password used to access the Redis protected server. |
-| <a name="output_irsa_policy_arn"></a> [irsa\_policy\_arn](#output\_irsa\_policy\_arn) | IAM role ARN for use with IRSA |
+| <a name="output_irsa_policy_arn"></a> [irsa\_policy\_arn](#output\_irsa\_policy\_arn) | IAM policy ARN for access to rotate the Redis AUTH token |
 | <a name="output_member_clusters"></a> [member\_clusters](#output\_member\_clusters) | The identifiers of all the nodes that are part of this replication group. |
 | <a name="output_primary_endpoint_address"></a> [primary\_endpoint\_address](#output\_primary\_endpoint\_address) | The address of the endpoint for the primary node in the replication group, if the cluster mode is disabled. |
 | <a name="output_replication_group_id"></a> [replication\_group\_id](#output\_replication\_group\_id) | Redis cluster ID |
@@ -117,61 +175,4 @@ You should use your namespace variables to populate these. See the [Usage](#usag
 
 - [Cloud Platform user guide](https://user-guide.cloud-platform.service.justice.gov.uk/#cloud-platform-user-guide)
 - [Amazon ElastiCache for Redis user guide](https://docs.aws.amazon.com/AmazonElastiCache/latest/red-ug/WhatIs.html)
-
-<!-- TODO: Move the below to a user guide -->
-## Access outside the cluster
-
-Your redis instance is reachable only from inside the cluster VPC, but you can use the same technique to access it from your development environment as for [accessing an RDS instance](https://user-guide.cloud-platform.service.justice.gov.uk/documentation/other-topics/rds-external-access.html#accessing-your-rds-database)
-
-1. Run a port-forward pod
-
-```
-kubectl \
-  -n [your namespace] \
-  run port-forward-pod \
-  --generator=run-pod/v1 \
-  --image=ministryofjustice/port-forward \
-  --port=6379 \
-  --env="REMOTE_HOST=[your redis cluster hostname]" \
-  --env="LOCAL_PORT=6379" \
-  --env="REMOTE_PORT=6379"
-```
-
-2. Forward local traffic to the port-forward-pod
-
-```
-kubectl \
-  -n [your namespace] \
-  port-forward \
-  port-forward-pod 6379:6379
-```
-
-You need to leave this running as long as you are accessing the redis cluster.
-
-3. Use the ruby redis client to access redis
-
-> At the time of writing, the `redis-cli` command-line tool cannot use encrypted redis connections (i.e. those with a URL starting `rediss://...` as opposed to `redis://...`). So, this section describes how to use the `redis` ruby gem to connect to your elasticache cluster.
-
-```
-export REDIS_URL=[modified URL from namespace secret]
-```
-
-The value here should be the redis URL from your namespace secret, but with the hostname replaced with `localhost`
-
-For instance, if the redis URL in your namespace secret is this:
-
-```
-url: rediss://dummyuser:6a36be5513564382b436b36be55e15a5@master.cp-8f56be55d06be5548.iwfvzo.euw2.cache.amazonaws.com:6379
-```
-
-...then the value you need for `REDIS_URL` is:
-
-```
-rediss://dummyuser:6a36be5513564382b436b36be55e15a5@localhost:6379
-```
-
-Then you can use the ruby redis client like this:
-
-```
-ruby -r redis -e 'redis = Redis.new(uri: ENV.fetch("REDIS_URL")); redis.set("foo", 123); puts redis.get("foo")'
-```
+- [Redis documentation](https://redis.io/docs/)
