@@ -125,41 +125,6 @@ resource "aws_elasticache_subnet_group" "ec_subnet" {
   tags = local.default_tags
 }
 
-#################################
-# Legacy long-lived credentials #
-#################################
-resource "aws_iam_user" "user" {
-  name = "cp-elasticache-${random_id.id.hex}"
-  path = "/system/elasticache-user/"
-
-  tags = local.default_tags
-}
-
-resource "aws_iam_access_key" "key" {
-  user = aws_iam_user.user.name
-}
-
-resource "aws_iam_user_policy" "userpol" {
-  name   = aws_iam_user.user.name
-  policy = data.aws_iam_policy_document.policy.json
-  user   = aws_iam_user.user.name
-}
-
-data "aws_iam_policy_document" "policy" {
-  statement {
-    actions = [
-      "elasticache:ModifyReplicationGroup",
-      "elasticache:DescribeReplicationGroups",
-      "elasticache:DescribeCacheClusters",
-    ]
-
-    resources = [
-      aws_elasticache_replication_group.ec_redis.arn,
-      "arn:aws:elasticache:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:cluster:${aws_elasticache_replication_group.ec_redis.id}-*",
-    ]
-  }
-}
-
 ##################################
 # Short-lived (IRSA) credentials #
 ##################################
