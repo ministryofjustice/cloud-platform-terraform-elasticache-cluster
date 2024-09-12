@@ -62,7 +62,7 @@ data "aws_availability_zones" "available" {
 data "aws_subnets" "eks_private" {
   filter {
     name   = "vpc-id"
-    values = [data.aws_vpc.this.id]
+    values = [data.aws_vpc.selected.id]
   }
 
   tags = {
