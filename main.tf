@@ -59,6 +59,22 @@ data "aws_availability_zones" "available" {
   state = "available"
 }
 
+data "aws_subnets" "eks_private" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.selected.id]
+  }
+
+  tags = {
+    SubnetType = "EKS-Private"
+  }
+}
+
+data "aws_subnet" "eks_private" {
+  for_each = toset(data.aws_subnets.eks_private.ids)
+  id       = each.value
+}
+
 ##########################
 # Create Security Groups #
 ##########################
@@ -75,14 +91,20 @@ resource "aws_security_group" "ec" {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = [for s in data.aws_subnet.private : s.cidr_block]
+    cidr_blocks = concat(
+      [for s in data.aws_subnet.private : s.cidr_block],
+      [for s in data.aws_subnet.eks_private : s.cidr_block]
+    )
   }
 
   egress {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"
-    cidr_blocks = [for s in data.aws_subnet.private : s.cidr_block]
+    cidr_blocks = concat(
+      [for s in data.aws_subnet.private : s.cidr_block],
+      [for s in data.aws_subnet.eks_private : s.cidr_block]
+    )
   }
 
   tags = local.default_tags
