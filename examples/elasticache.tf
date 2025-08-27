@@ -19,6 +19,11 @@ module "redis" {
   namespace              = var.namespace
   environment_name       = var.environment
   infrastructure_support = var.infrastructure_support
+
+  # If you want to assign AWS permissions to a k8s pod in your namespace - ie service pod for CLI queries,
+  # uncomment below:
+
+  # enable_irsa = true
 }
 
 resource "kubernetes_secret" "redis_secrets" {

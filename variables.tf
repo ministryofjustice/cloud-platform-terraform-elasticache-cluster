@@ -46,6 +46,15 @@ variable "auth_token_rotated_date" {
 }
 
 ########
+# IRSA #
+########
+variable "enable_irsa" {
+  description = "Enable creation of IRSA resources for elasticache credentials (for service pod maintenance etc). Defaults to false"
+  type        = bool
+  default     = false
+}
+
+########
 # Tags #
 ########
 variable "business_unit" {
