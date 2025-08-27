@@ -152,8 +152,8 @@ No modules.
 | <a name="input_application"></a> [application](#input\_application) | Application name | `string` | n/a | yes |
 | <a name="input_auth_token_rotated_date"></a> [auth\_token\_rotated\_date](#input\_auth\_token\_rotated\_date) | Process to spin new auth token. Pass date to regenerate new token | `string` | `""` | no |
 | <a name="input_business_unit"></a> [business\_unit](#input\_business\_unit) | Area of the MOJ responsible for the service | `string` | n/a | yes |
+| <a name="input_enable_irsa"></a> [enable\_irsa](#input\_enable\_irsa) | Enable creation of IRSA resources for elasticache credentials (for service pod maintenance etc). Defaults to false | `bool` | `false` | no |
 | <a name="input_engine_version"></a> [engine\_version](#input\_engine\_version) | Engine version (e.g. 7.0) | `string` | n/a | yes |
-| <a name="input_enable_irsa"></a> [enable\_irsa](#input\_enable\_irsa) | Enable creation of IRSA resources for Elasticache credentials (for service pod maintenance etc). Defaults to false | `bool` | `false` | no |
 | <a name="input_environment_name"></a> [environment\_name](#input\_environment\_name) | Environment name | `string` | n/a | yes |
 | <a name="input_infrastructure_support"></a> [infrastructure\_support](#input\_infrastructure\_support) | The team responsible for managing the infrastructure. Should be of the form <team-name> (<team-email>) | `string` | n/a | yes |
 | <a name="input_is_production"></a> [is\_production](#input\_is\_production) | Whether this is used for production or not | `string` | n/a | yes |
