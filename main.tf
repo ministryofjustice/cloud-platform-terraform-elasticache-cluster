@@ -154,6 +154,7 @@ data "aws_caller_identity" "current" {}
 data "aws_region" "current" {}
 
 data "aws_iam_policy_document" "irsa" {
+  count   = var.enable_irsa ? 1 : 0
   version = "2012-10-17"
   statement {
     sid    = "AllowRotateRedisAUTHTokenFor${random_id.id.hex}"
@@ -171,8 +172,9 @@ data "aws_iam_policy_document" "irsa" {
 }
 
 resource "aws_iam_policy" "irsa" {
+  count  = var.enable_irsa ? 1 : 0
   name   = "cloud-platform-elasticache-${random_id.id.hex}"
   path   = "/cloud-platform/elasticache/"
-  policy = data.aws_iam_policy_document.irsa.json
+  policy = data.aws_iam_policy_document.irsa[0].json
   tags   = local.default_tags
 }

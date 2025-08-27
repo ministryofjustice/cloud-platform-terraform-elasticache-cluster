@@ -90,6 +90,22 @@ Then you can use the ruby redis client like this:
 ruby -r redis -e 'redis = Redis.new(uri: ENV.fetch("REDIS_URL")); redis.set("foo", 123); puts redis.get("foo")'
 ```
 
+## IMPORTANT - Release 7.3.0 changes:
+
+## IRSA policy
+
+If you want to be able to query the AWS Elasticache API from your namespace (for example via the [Cloud Platform AWS CLI service pod](https://github.com/ministryofjustice/cloud-platform-terraform-service-pod)), then you'll need to pass in the following argument to your module call:
+
+```
+module "redis" {
+    ...
+    ...
+    enable_irsa = true
+}
+```
+
+This change has been introduced to support Cloud Platform's effort in reducing the count of unused IAM policies
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
@@ -137,6 +153,7 @@ No modules.
 | <a name="input_auth_token_rotated_date"></a> [auth\_token\_rotated\_date](#input\_auth\_token\_rotated\_date) | Process to spin new auth token. Pass date to regenerate new token | `string` | `""` | no |
 | <a name="input_business_unit"></a> [business\_unit](#input\_business\_unit) | Area of the MOJ responsible for the service | `string` | n/a | yes |
 | <a name="input_engine_version"></a> [engine\_version](#input\_engine\_version) | Engine version (e.g. 7.0) | `string` | n/a | yes |
+| <a name="input_enable_irsa"></a> [enable\_irsa](#input\_enable\_irsa) | Enable creation of IRSA resources for Elasticache credentials (for service pod maintenance etc). Defaults to false | `bool` | `false` | no |
 | <a name="input_environment_name"></a> [environment\_name](#input\_environment\_name) | Environment name | `string` | n/a | yes |
 | <a name="input_infrastructure_support"></a> [infrastructure\_support](#input\_infrastructure\_support) | The team responsible for managing the infrastructure. Should be of the form <team-name> (<team-email>) | `string` | n/a | yes |
 | <a name="input_is_production"></a> [is\_production](#input\_is\_production) | Whether this is used for production or not | `string` | n/a | yes |
@@ -154,7 +171,7 @@ No modules.
 | Name | Description |
 |------|-------------|
 | <a name="output_auth_token"></a> [auth\_token](#output\_auth\_token) | The password used to access the Redis protected server. |
-| <a name="output_irsa_policy_arn"></a> [irsa\_policy\_arn](#output\_irsa\_policy\_arn) | IAM policy ARN for access to rotate the Redis AUTH token |
+| <a name="output_irsa_policy_arn"></a> [irsa\_policy\_arn](#output\_irsa\_policy\_arn) | IAM policy ARN for access to rotate the Redis AUTH token. We're nulling the value if module call doesnt enable irsa. |
 | <a name="output_member_clusters"></a> [member\_clusters](#output\_member\_clusters) | The identifiers of all the nodes that are part of this replication group. |
 | <a name="output_primary_endpoint_address"></a> [primary\_endpoint\_address](#output\_primary\_endpoint\_address) | The address of the endpoint for the primary node in the replication group, if the cluster mode is disabled. |
 | <a name="output_replication_group_id"></a> [replication\_group\_id](#output\_replication\_group\_id) | Redis cluster ID |
