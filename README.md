@@ -90,7 +90,7 @@ Then you can use the ruby redis client like this:
 ruby -r redis -e 'redis = Redis.new(uri: ENV.fetch("REDIS_URL")); redis.set("foo", 123); puts redis.get("foo")'
 ```
 
-## IMPORTANT - Release 7.3.0 changes:
+## IMPORTANT - Release 8.0.0 changes:
 
 ## IRSA policy
 
