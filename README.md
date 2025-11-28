@@ -174,6 +174,7 @@ No modules.
 | <a name="output_irsa_policy_arn"></a> [irsa\_policy\_arn](#output\_irsa\_policy\_arn) | IAM policy ARN for access to rotate the Redis AUTH token. We're nulling the value if module call doesnt enable irsa. |
 | <a name="output_member_clusters"></a> [member\_clusters](#output\_member\_clusters) | The identifiers of all the nodes that are part of this replication group. |
 | <a name="output_primary_endpoint_address"></a> [primary\_endpoint\_address](#output\_primary\_endpoint\_address) | The address of the endpoint for the primary node in the replication group, if the cluster mode is disabled. |
+| <a name="output_reader_endpoint_address"></a> [reader\_endpoint\_address](#output\_reader\_endpoint\_address) | The address of the endpoint for the reader node in the replication group, if the cluster mode is disabled. |
 | <a name="output_replication_group_id"></a> [replication\_group\_id](#output\_replication\_group\_id) | Redis cluster ID |
 <!-- END_TF_DOCS -->
 
