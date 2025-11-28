@@ -3,6 +3,12 @@ output "primary_endpoint_address" {
   value       = aws_elasticache_replication_group.ec_redis.primary_endpoint_address
 }
 
+output "reader_endpoint_address" {
+  description = "The address of the endpoint for the reader node in the replication group, if the cluster mode is disabled."
+  value       = aws_elasticache_replication_group.ec_redis.reader_endpoint_address
+}
+
+
 output "member_clusters" {
   description = "The identifiers of all the nodes that are part of this replication group."
   value       = aws_elasticache_replication_group.ec_redis.member_clusters
