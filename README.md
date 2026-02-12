@@ -43,7 +43,6 @@ Your redis instance is reachable only from inside the cluster VPC, but you can u
 kubectl \
   -n [your namespace] \
   run port-forward-pod \
-  --generator=run-pod/v1 \
   --image=ministryofjustice/port-forward \
   --port=6379 \
   --env="REMOTE_HOST=[your redis cluster hostname]" \
@@ -62,33 +61,18 @@ kubectl \
 
 You need to leave this running as long as you are accessing the redis cluster.
 
-3. Use the ruby redis client to access redis
-
-> At the time of writing, the `redis-cli` command-line tool cannot use encrypted redis connections (i.e. those with a URL starting `rediss://...` as opposed to `redis://...`). So, this section describes how to use the `redis` ruby gem to connect to your elasticache cluster.
+3. Use the redis cli 
 
 ```
-export REDIS_URL=[modified URL from namespace secret]
-```
-
-The value here should be the redis URL from your namespace secret, but with the hostname replaced with `localhost`
-
-For instance, if the redis URL in your namespace secret is this:
+run redis-cli -h 127.0.0.1 -p 6379 --tls -a [your_auth_token_secret]
 
 ```
-url: rediss://dummyuser:6a36be5513564382b436b36be55e15a5@master.cp-8f56be55d06be5548.iwfvzo.euw2.cache.amazonaws.com:6379
-```
 
-...then the value you need for `REDIS_URL` is:
+The value of your redis_host and auth_token can be retrieved from the secret you created as part of this module in your namespace 
 
-```
-rediss://dummyuser:6a36be5513564382b436b36be55e15a5@localhost:6379
-```
+Remember to stop running the port-forward-pod when done
 
-Then you can use the ruby redis client like this:
 
-```
-ruby -r redis -e 'redis = Redis.new(uri: ENV.fetch("REDIS_URL")); redis.set("foo", 123); puts redis.get("foo")'
-```
 
 ## IMPORTANT - Release 8.0.0 changes:
 
