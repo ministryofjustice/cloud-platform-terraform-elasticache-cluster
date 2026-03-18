@@ -115,7 +115,7 @@ resource "aws_security_group" "ec" {
 ##############################
 resource "aws_elasticache_replication_group" "ec_redis" {
   automatic_failover_enabled = true
-  preferred_cache_cluster_azs = slice(
+  preferred_cache_cluster_azs = length(var.preferred_cache_cluster_azs) > 0 ? var.preferred_cache_cluster_azs : slice(
     data.aws_availability_zones.available.names,
     0,
     var.number_cache_clusters,

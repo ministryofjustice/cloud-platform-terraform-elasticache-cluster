@@ -27,6 +27,12 @@ variable "number_cache_clusters" {
   default     = "2"
 }
 
+variable "preferred_cache_cluster_azs" {
+  description = "List of EC2 availability zones in which the cache clusters will be created. If not specified, AZs are chosen automatically based on number_cache_clusters."
+  type        = list(string)
+  default     = []
+}
+
 variable "snapshot_window" {
   type        = string
   description = "The daily time range (in UTC) during which ElastiCache will begin taking a daily snapshot of your cache cluster. The minimum snapshot window is a 60 minute period. Example: 05:00-09:00"
