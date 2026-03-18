@@ -146,6 +146,7 @@ No modules.
 | <a name="input_node_type"></a> [node\_type](#input\_node\_type) | Instance class to be used | `string` | n/a | yes |
 | <a name="input_number_cache_clusters"></a> [number\_cache\_clusters](#input\_number\_cache\_clusters) | Number of cache clusters (primary and replicas) this replication group will have | `string` | `"2"` | no |
 | <a name="input_parameter_group_name"></a> [parameter\_group\_name](#input\_parameter\_group\_name) | Name of the parameter group aligned with the version specified in engine\_version (e.g. default.redis7) | `string` | n/a | yes |
+| <a name="input_preferred_cache_cluster_azs"></a> [preferred\_cache\_cluster\_azs](#input\_preferred\_cache\_cluster\_azs) | List of EC2 availability zones in which the cache clusters will be created. If not specified, AZs are chosen automatically based on number\_cache\_clusters. | `list(string)` | `[]` | no |
 | <a name="input_snapshot_window"></a> [snapshot\_window](#input\_snapshot\_window) | The daily time range (in UTC) during which ElastiCache will begin taking a daily snapshot of your cache cluster. The minimum snapshot window is a 60 minute period. Example: 05:00-09:00 | `string` | `""` | no |
 | <a name="input_team_name"></a> [team\_name](#input\_team\_name) | Team name | `string` | n/a | yes |
 | <a name="input_vpc_name"></a> [vpc\_name](#input\_vpc\_name) | The name of the vpc (eg.: live-1) | `string` | n/a | yes |
